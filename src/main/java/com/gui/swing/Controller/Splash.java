@@ -39,8 +39,8 @@ public class Splash extends javax.swing.JFrame {
                     // Sau khi thanh progress đạt 100%, mở form login
                     dispose(); // Đóng form hiện tại
 
-                    Application main = new Application();
-                    main.setVisible(true);
+                    Login loginForm = new Login();
+                    loginForm.setVisible(true);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -74,7 +74,7 @@ public class Splash extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("WELCOME TO NKT HOTEL");
+        jLabel1.setText("WELCOME TO NT HOTEL");
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/logo.png"))); // NOI18N
 
@@ -104,7 +104,7 @@ public class Splash extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(149, 149, 149)
                                 .addComponent(jLabel2)))
-                        .addGap(0, 49, Short.MAX_VALUE)))
+                        .addGap(0, 64, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
