@@ -3,8 +3,8 @@ package com.gui.swing.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +19,7 @@ public class Room {
 
     private Boolean roomIsActive;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "floor_id", nullable = false)
     private Floor floor;
 
@@ -27,6 +27,23 @@ public class Room {
     @JoinColumn(name = "type_id")
     private Type type;
 
-    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<RoomInfo> roomInfoList;
+
+    public Room(){}
+    public Room(String roomName){
+        this.roomName = roomName;
+        this.roomIsActive = true;
+        this.roomInfoList = new ArrayList<>();
+    }
+
+    public void addNewRoomInfo(RoomInfo roomInfo) {
+        this.roomInfoList.add(roomInfo);
+        roomInfo.setRoom(this);
+    }
+
+    public void removeRoomInfo(RoomInfo roomInfo) {
+        this.roomInfoList.remove(roomInfo);
+    }
+
 }

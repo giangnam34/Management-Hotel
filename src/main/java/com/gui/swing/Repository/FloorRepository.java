@@ -10,4 +10,8 @@ import java.util.List;
 public interface FloorRepository extends JpaRepository<Floor, Integer> {
 
     Floor findByFloorName(String floorName);
+
+    boolean existsFloorByFloorName(String floorName);
+
+
 }

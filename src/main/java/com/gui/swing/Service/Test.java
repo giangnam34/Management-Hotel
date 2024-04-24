@@ -1,22 +1,22 @@
 package com.gui.swing.Service;
 
+import com.gui.swing.DTO.Request.AddNewRoomRequest;
 import com.gui.swing.DTO.Request.ChangePasswordRequest;
 import com.gui.swing.DTO.Request.SendEmailRequest;
 import com.gui.swing.DTO.Response.GeneralResponse;
 import com.gui.swing.DTO.Response.InfoRoomResponse;
-import com.gui.swing.Entity.Enum.EnumTypeRent;
-import com.gui.swing.Entity.Guest;
+import com.gui.swing.DTO.Response.Pair;
+import com.gui.swing.Entity.Enum.EnumTypeRoom;
 import com.gui.swing.Repository.FloorRepository;
 import com.gui.swing.Repository.GuestRepository;
-import com.gui.swing.Entity.RoomGuest;
 import com.gui.swing.Repository.RoomGuestRepository;
 import com.gui.swing.Repository.RoomRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ import java.util.Map;
 public class Test {
 
     @Autowired
-    AuthenticationService authenticationService;
+    AuthenticationServiceImpl authenticationService;
 
     @Autowired
     EmailService emailService;
@@ -44,6 +44,12 @@ public class Test {
 
     @Autowired
     private InfoFloorService infoFloorService;
+
+    @Autowired
+    private AdminService adminService;
+
+    @Autowired
+    private FloorRepository floorRepository;
 
 
     public void testLogin(){
@@ -85,4 +91,21 @@ public class Test {
     public void testGetAllFloor(){
         System.out.println(infoFloorService.getAllFloor());
     }
+
+    public void testAddNewFloor(){
+        System.out.println(adminService.addNewFloorWithDataOfExistingDataFloor("Floor14", "Floor1"));
+    }
+
+    public void testAddNewRoomToFloor(){
+        AddNewRoomRequest addNewRoomRequest = new AddNewRoomRequest();
+        addNewRoomRequest.setRoomName("Test room");
+        addNewRoomRequest.setRoomType(EnumTypeRoom.Vip);
+        List<Pair> infoRoom = new ArrayList<>();
+        infoRoom.add(new Pair("Diện tích", "40m2"));
+        infoRoom.add(new Pair("Số người ở tối đa", "4 người"));
+        infoRoom.add(new Pair("Mặt tiền", "3 mặt tiền"));
+        addNewRoomRequest.setInfoRoom(infoRoom);
+        System.out.println(adminService.addNewRoomToFloor(addNewRoomRequest,"Floor1"));
+    }
+
 }

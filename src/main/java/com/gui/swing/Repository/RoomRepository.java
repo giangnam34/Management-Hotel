@@ -11,4 +11,13 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
 
     public List<Room> findAllByFloorFloorName(String floorName);
 
+    public Boolean existsRoomByRoomId(int roomId);
+
+    public Room findByRoomId(int roomId);
+
+    public Boolean existsRoomByRoomNameAndFloor_FloorName(String roomName, String floorName);
+
+    public Room findByRoomNameAndFloor_FloorName(String roomName, String floorName);
+
+
 }

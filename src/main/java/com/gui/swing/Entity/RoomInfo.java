@@ -16,9 +16,16 @@ public class RoomInfo {
 
     private String valueRoomInfo;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
 
+    public RoomInfo(String keyRoomInfo, String valueRoomInfo) {
+        this.keyRoomInfo = keyRoomInfo;
+        this.valueRoomInfo = valueRoomInfo;
+    }
 
+    public RoomInfo() {
+
+    }
 }

@@ -7,45 +7,44 @@ import com.gui.swing.Entity.OTPCode;
 import com.gui.swing.Entity.User;
 import com.gui.swing.Repository.OTPCodeRepository;
 import com.gui.swing.Repository.UserRepository;
+import com.gui.swing.Service.Interface.AuthenticationService;
 import jakarta.mail.MessagingException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class AuthenticationService {
+@AllArgsConstructor
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final String regexEmail = "/(([^<>()\\[\\]\\\\.,;:\\s+@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))/mg";
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     private OTPCodeRepository otpCodeRepository;
 
-    public AuthenticationService() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        passwordEncoder = bCryptPasswordEncoder;
-    }
+    private AnnotationConfigApplicationContext context;
 
 
+    @Override
     public String encodePassword(String rawPassword) {
         return passwordEncoder.encode(rawPassword);
     }
 
-    public GeneralResponse authentication(String username, String password){
+    @Override
+    public GeneralResponse authentication(String username, String password) throws IllegalArgumentException{
         GeneralResponse authenticationMessage = new GeneralResponse();
         if (!ValidationService.validateEmail(username)){
             authenticationMessage.setStatus(-1);
@@ -67,6 +66,7 @@ public class AuthenticationService {
         return authenticationMessage;
     }
 
+    @Override
     public GeneralResponse forgetPassword(String email) throws MessagingException {
         GeneralResponse generalResponse = new GeneralResponse();
         System.out.println(email);
@@ -94,6 +94,7 @@ public class AuthenticationService {
         return generalResponse;
     }
 
+    @Override
     public Boolean confirmOTPCode(String userName, int otpCode){
         if (!ValidationService.existsUserByUserName(userRepository,userName))
             return false;
@@ -101,6 +102,7 @@ public class AuthenticationService {
         return user.getOtpCode().getValue() == otpCode;
     }
 
+    @Override
     public int sendConfirmationCode(String email) throws MessagingException {
         Map<String,Object> context = new HashMap<>();
         int confirmationCode = GeneralService.generateConfirmationCode(100000,999999);
@@ -110,6 +112,7 @@ public class AuthenticationService {
         return result.getStatus() == 1 ? confirmationCode : 0;
     }
 
+    @Override
     public GeneralResponse changePassword(ChangePasswordRequest changePasswordRequest){
         GeneralResponse generalResponse = new GeneralResponse();
         if (!ValidationService.validateEmail(changePasswordRequest.getUserName())){
