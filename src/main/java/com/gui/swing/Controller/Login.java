@@ -4,6 +4,11 @@
  */
 package com.gui.swing.Controller;
 
+import com.gui.swing.Service.Interface.AuthenticationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Controller;
+
 import javax.swing.JOptionPane;
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +23,7 @@ import java.awt.event.KeyListener;
  */
 public class Login extends javax.swing.JFrame {
 
+    private ConfigurableApplicationContext context;
     class EnterKeyListener implements KeyListener {
 
         @Override
@@ -40,6 +46,18 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
+        initComponents();
+        setLocationRelativeTo(null);
+        setPlaceholder(inputEmail, "Enter your email");
+        setPlaceholder(inputPassword, "Enter your password");
+
+        // Thêm KeyListener cho các trường JTextField
+        inputEmail.addKeyListener(new EnterKeyListener());
+        inputPassword.addKeyListener(new EnterKeyListener());
+    }
+
+    public Login(ConfigurableApplicationContext context) {
+        this.context = context;
         initComponents();
         setLocationRelativeTo(null);
         setPlaceholder(inputEmail, "Enter your email");
@@ -144,6 +162,8 @@ public class Login extends javax.swing.JFrame {
 
         jPanel7.setPreferredSize(new java.awt.Dimension(250, 50));
 
+//        AuthenticationService authenticationService = context.getBean(AuthenticationService.class);
+//        jLabel3.setText(authenticationService.encodePassword("giangnam"));
         jLabel3.setText("EMAIL: ");
 
         inputEmail.setToolTipText("");
@@ -279,7 +299,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("NKT HOTEL");
+        jLabel4.setText("NT HOTEL");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -290,7 +310,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(88, Short.MAX_VALUE)
+                .addContainerGap(103, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addGap(76, 76, 76))
         );

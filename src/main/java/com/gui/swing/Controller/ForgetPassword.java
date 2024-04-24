@@ -4,6 +4,7 @@
  */
 package com.gui.swing.Controller;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -48,6 +49,8 @@ public class ForgetPassword extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         
         inputEmail.addKeyListener(new ForgetPassword.EnterKeyListener());
+
+        inputEmail.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email");
     }
 
     /**
@@ -58,7 +61,7 @@ public class ForgetPassword extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
 
     private void sendButtonClicked() {
-        String email = inputEmail.getText().trim();
+       String email = inputEmail.getText().trim();
         // Kiểm tra xem trường email có trống không
         if (email.isEmpty()) {
             // Hiển thị thông báo lỗi
@@ -79,14 +82,24 @@ public class ForgetPassword extends javax.swing.JFrame {
 
         // Thêm logic của bạn ở đây để xử lý việc gửi email
     }
+    
+     private void openOTPConfirmForm() {
+        // Giả định bạn đã có một instance của form OTPConfirm
+        // Giả sử là otpConfirmForm là biến cho form "OTPConfirm"
+        OTP otpConfirmForm = new OTP(); // Tạo mới form OTPConfirm hoặc sử dụng form đã có
+        otpConfirmForm.setVisible(true); // Hiển thị form OTPConfirm
+    }
 
     private void startCountdown() {
+        countDownSeconds = 3; // Thiết lập thời gian đếm ngược là 3 giây
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 countDownSeconds--;
                 if (countDownSeconds <= 0) {
                     stopCountdown();
+                    ForgetPassword.this.setVisible(false); // Ẩn form ForgetPassword
+                    openOTPConfirmForm(); // Hiển thị form OTPConfirm
                 }
             }
         });
@@ -100,7 +113,7 @@ public class ForgetPassword extends javax.swing.JFrame {
         btnSend.setText("Send");
     }
 
-    private boolean isValidEmail(String email) {
+     private boolean isValidEmail(String email) {
         // Biểu thức chính quy để kiểm tra định dạng email
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);

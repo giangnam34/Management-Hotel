@@ -1,5 +1,10 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.gui.swing;
 
+import com.gui.swing.Controller.Splash;
 
 import com.gui.swing.Controller.MyFrame;
 import com.gui.swing.Service.EmailService;
@@ -25,22 +30,24 @@ public class Application extends javax.swing.JFrame{
     private EmailService emailService;
 
     public static void main(String[] args) {
-//        ConfigurableApplicationContext context = createApplicationContext(args);
-//        displayMainFrame(context);
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         SpringApplication.run(Application.class, args);
     }
 
-//    private static ConfigurableApplicationContext createApplicationContext(String... args) {
-//        return new SpringApplicationBuilder(Application.class)
-//                .headless(false)
-//                .run(args);
-//    }
-//
-//    private static void displayMainFrame(ConfigurableApplicationContext context) {
-//        SwingUtilities.invokeLater(() -> {
-//            MyFrame mainMenuController = context.getBean(MyFrame.class);
-//        });
-//    }
+    private static void displayMainFrame(ConfigurableApplicationContext context) {
+        SwingUtilities.invokeLater(() -> {
+            Splash splash = new Splash(context);
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
@@ -54,7 +61,7 @@ public class Application extends javax.swing.JFrame{
 //		test.testIsRoomRent();
 //        test.testGetAllFloor();
 //        test.testAddNewFloor();
-        test.testAddNewRoomToFloor();
+//        test.testAddNewRoomToFloor();
         return (args) ->{
             System.out.println(1);
         };

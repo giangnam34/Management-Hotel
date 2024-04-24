@@ -11,11 +11,10 @@ import java.awt.event.ActionListener;
 
 
 
-@Controller
 public class MyFrame extends JFrame implements ActionListener {
 
-    @Autowired
-    private AuthenticationService authenticationService;
+//    @Autowired
+//    private AuthenticationService authenticationService;
 
     // Components of the Form
     private Container c;
@@ -219,7 +218,7 @@ public class MyFrame extends JFrame implements ActionListener {
                 String data1;
                 String data
                         = "Name123 : "
-                        + authenticationService.encodePassword("abc") + "\n"
+                        + "abc\n"
                         + "Mobile : "
                         + tmno.getText() + "\n";
                 if (male.isSelected())
