@@ -38,9 +38,9 @@ public class OTP extends javax.swing.JFrame {
         txtNum4.addKeyListener(new OTP.DigitKeyListener());
 
         txtNum1.setHorizontalAlignment(JTextField.CENTER);
-    txtNum2.setHorizontalAlignment(JTextField.CENTER);
-    txtNum3.setHorizontalAlignment(JTextField.CENTER);
-    txtNum4.setHorizontalAlignment(JTextField.CENTER);
+        txtNum2.setHorizontalAlignment(JTextField.CENTER);
+        txtNum3.setHorizontalAlignment(JTextField.CENTER);
+        txtNum4.setHorizontalAlignment(JTextField.CENTER);
     }
 
     private boolean isAllFieldsFilled() {
@@ -57,8 +57,10 @@ public class OTP extends javax.swing.JFrame {
         waitTimer = new javax.swing.Timer(3000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                OTP.this.setVisible(false);
-                OTP.this.dispose();
+                OTP.this.setVisible(false); // Ẩn form OTP
+                // Khởi tạo và hiển thị form ResetPassword
+                new ResetPassword().setVisible(true);
+                OTP.this.dispose(); // Đóng form OTP
             }
         });
         waitTimer.setRepeats(false);
@@ -95,18 +97,18 @@ public class OTP extends javax.swing.JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
-        JTextField currentTextField = (JTextField) e.getComponent();
-        if (e.getKeyCode() == KeyEvent.VK_TAB) {
-            if (currentTextField == txtNum1) {
-                txtNum2.requestFocus();
-            } else if (currentTextField == txtNum2) {
-                txtNum3.requestFocus();
-            } else if (currentTextField == txtNum3) {
-                txtNum4.requestFocus();
+            JTextField currentTextField = (JTextField) e.getComponent();
+            if (e.getKeyCode() == KeyEvent.VK_TAB) {
+                if (currentTextField == txtNum1) {
+                    txtNum2.requestFocus();
+                } else if (currentTextField == txtNum2) {
+                    txtNum3.requestFocus();
+                } else if (currentTextField == txtNum3) {
+                    txtNum4.requestFocus();
+                }
+                e.consume();
             }
-            e.consume();
         }
-    }
     }
 
     /**
