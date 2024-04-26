@@ -20,6 +20,7 @@ public class RecDashboard extends javax.swing.JFrame {
     CardLayout cardLayout;
     public RecDashboard() {
         initComponents();
+        setLocationRelativeTo(null);
         cardLayout = (CardLayout)pnlCards.getLayout();
     }
 
