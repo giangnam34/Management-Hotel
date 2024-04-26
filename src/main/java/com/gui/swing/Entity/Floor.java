@@ -24,13 +24,13 @@ public class Floor {
     private List<Room> roomList;
 
     public Floor(String floorName) {
+        new Floor();
         this.floorName = floorName;
-        this.roomList = new ArrayList<>();
-        this.isActive = true;
     }
 
     public Floor() {
-
+        this.isActive = true;
+        this.roomList = new ArrayList<>();
     }
 
     public void addNewRoom(Room room) {

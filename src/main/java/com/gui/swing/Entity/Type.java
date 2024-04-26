@@ -2,7 +2,9 @@ package com.gui.swing.Entity;
 
 import com.gui.swing.Entity.Enum.EnumTypeRoom;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class Type {
     @Enumerated(EnumType.STRING)
     private EnumTypeRoom roomTypeValue;
 
+    @Min(0)
     private Double roomTypePrice;
 
     @OneToMany(mappedBy = "type")

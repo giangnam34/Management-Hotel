@@ -45,7 +45,7 @@ public class Application extends javax.swing.JFrame{
 
     private static void displayMainFrame(ConfigurableApplicationContext context) {
         SwingUtilities.invokeLater(() -> {
-            Splash splash = new Splash(context);
+//            Splash splash = new Splash(context);
         });
     }
 

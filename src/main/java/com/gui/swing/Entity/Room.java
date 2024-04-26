@@ -24,17 +24,19 @@ public class Room {
     private Floor floor;
 
     @ManyToOne
-    @JoinColumn(name = "type_id")
+    @JoinColumn(name = "type_id", nullable = false)
     private Type type;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<RoomInfo> roomInfoList;
 
-    public Room(){}
-    public Room(String roomName){
-        this.roomName = roomName;
+    public Room(){
         this.roomIsActive = true;
         this.roomInfoList = new ArrayList<>();
+    }
+    public Room(String roomName){
+        new Room();
+        this.roomName = roomName;
     }
 
     public void addNewRoomInfo(RoomInfo roomInfo) {

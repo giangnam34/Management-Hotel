@@ -19,7 +19,7 @@ import org.springframework.stereotype.Controller;
 public class Splash extends javax.swing.JFrame {
     // Khai báo biến progressValue để lưu giá trị của thanh progress
 
-    int progressValue = 0;
+    int progressValue = 95;
 
     private ConfigurableApplicationContext context;
 
