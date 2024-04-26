@@ -29,6 +29,7 @@ public class RecDashboard extends javax.swing.JFrame {
     public RecDashboard(ConfigurableApplicationContext context) {
         this.context = context;
         initComponents();
+        setLocationRelativeTo(null);
         cardLayout = (CardLayout)pnlCards.getLayout();
     }
 
