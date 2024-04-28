@@ -75,6 +75,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         pnlCard2 = new javax.swing.JPanel();
         pnlCard3 = new javax.swing.JPanel();
         pnlCard4 = new javax.swing.JPanel();
+        pnlCard5 = new javax.swing.JPanel();
+        pnlCard6 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1500, 800));
@@ -461,7 +463,7 @@ public class AdminDashboard extends javax.swing.JFrame {
             .addGroup(pnlCard1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
             .addGroup(pnlCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnlCard1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -478,7 +480,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGroup(pnlCard1Layout.createSequentialGroup()
                     .addGap(73, 73, 73)
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(433, Short.MAX_VALUE)))
+                    .addContainerGap(427, Short.MAX_VALUE)))
         );
 
         pnlCards.add(pnlCard1, "pnlCard1");
@@ -489,11 +491,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         pnlCard2.setLayout(pnlCard2Layout);
         pnlCard2Layout.setHorizontalGroup(
             pnlCard2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1270, Short.MAX_VALUE)
+            .addGap(0, 1256, Short.MAX_VALUE)
         );
         pnlCard2Layout.setVerticalGroup(
             pnlCard2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 705, Short.MAX_VALUE)
+            .addGap(0, 699, Short.MAX_VALUE)
         );
 
         pnlCards.add(pnlCard2, "pnlCard2");
@@ -502,11 +504,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         pnlCard3.setLayout(pnlCard3Layout);
         pnlCard3Layout.setHorizontalGroup(
             pnlCard3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1270, Short.MAX_VALUE)
+            .addGap(0, 1256, Short.MAX_VALUE)
         );
         pnlCard3Layout.setVerticalGroup(
             pnlCard3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 705, Short.MAX_VALUE)
+            .addGap(0, 699, Short.MAX_VALUE)
         );
 
         pnlCards.add(pnlCard3, "pnlCard3");
@@ -515,14 +517,40 @@ public class AdminDashboard extends javax.swing.JFrame {
         pnlCard4.setLayout(pnlCard4Layout);
         pnlCard4Layout.setHorizontalGroup(
             pnlCard4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1270, Short.MAX_VALUE)
+            .addGap(0, 1256, Short.MAX_VALUE)
         );
         pnlCard4Layout.setVerticalGroup(
             pnlCard4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 705, Short.MAX_VALUE)
+            .addGap(0, 699, Short.MAX_VALUE)
         );
 
         pnlCards.add(pnlCard4, "pnlCard4");
+
+        javax.swing.GroupLayout pnlCard5Layout = new javax.swing.GroupLayout(pnlCard5);
+        pnlCard5.setLayout(pnlCard5Layout);
+        pnlCard5Layout.setHorizontalGroup(
+            pnlCard5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1256, Short.MAX_VALUE)
+        );
+        pnlCard5Layout.setVerticalGroup(
+            pnlCard5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 699, Short.MAX_VALUE)
+        );
+
+        pnlCards.add(pnlCard5, "pnlCard5");
+
+        javax.swing.GroupLayout pnlCard6Layout = new javax.swing.GroupLayout(pnlCard6);
+        pnlCard6.setLayout(pnlCard6Layout);
+        pnlCard6Layout.setHorizontalGroup(
+            pnlCard6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1256, Short.MAX_VALUE)
+        );
+        pnlCard6Layout.setVerticalGroup(
+            pnlCard6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 705, Short.MAX_VALUE)
+        );
+
+        pnlCards.add(pnlCard6, "pnlCard6");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -567,7 +595,13 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnIncomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncomeActionPerformed
-
+        IncomeAdmin incomePanel = new IncomeAdmin(); // Tạo instance của JPanel chứa thông tin danh sách phòng
+        pnlCard5.setLayout(new BorderLayout()); // Set layout cho pnlCard2
+        pnlCard5.removeAll(); // Xóa tất cả các components hiện đang có (nếu có)
+        pnlCard5.add(incomePanel, BorderLayout.CENTER); // Thêm roomListPanel vào pnlCard2
+        pnlCard5.revalidate(); // Refresh và cập nhật lại UI
+        pnlCard5.repaint(); // Vẽ lại giao diện pnlCard2
+        cardLayout.show(pnlCards, "pnlCard5");
     }//GEN-LAST:event_btnIncomeActionPerformed
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
@@ -591,7 +625,13 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReservationActionPerformed
 
     private void btnAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountActionPerformed
-        // TODO add your handling code here:
+        AccountAdmin accountPanel = new AccountAdmin(); // Tạo instance của JPanel chứa thông tin danh sách phòng
+        pnlCard5.setLayout(new BorderLayout()); // Set layout cho pnlCard2
+        pnlCard5.removeAll(); // Xóa tất cả các components hiện đang có (nếu có)
+        pnlCard5.add(accountPanel, BorderLayout.CENTER); // Thêm roomListPanel vào pnlCard2
+        pnlCard5.revalidate(); // Refresh và cập nhật lại UI
+        pnlCard5.repaint(); // Vẽ lại giao diện pnlCard2
+        cardLayout.show(pnlCards, "pnlCard5");
     }//GEN-LAST:event_btnAccountActionPerformed
 
     /**
@@ -667,6 +707,8 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel pnlCard2;
     private javax.swing.JPanel pnlCard3;
     private javax.swing.JPanel pnlCard4;
+    private javax.swing.JPanel pnlCard5;
+    private javax.swing.JPanel pnlCard6;
     private javax.swing.JPanel pnlCards;
     // End of variables declaration//GEN-END:variables
 }

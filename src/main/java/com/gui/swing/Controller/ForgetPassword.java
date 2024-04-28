@@ -75,6 +75,8 @@ public class ForgetPassword extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Invalid email format", "Error", JOptionPane.ERROR_MESSAGE);
             return; // Không thực hiện gửi email nếu định dạng không đúng
         }
+        
+        
 
         btnSend.setText("Sending..."); // Thay đổi chữ của nút SEND thành "Sending..."
         btnSend.setEnabled(false); // Vô hiệu hóa nút khi người dùng nhấn

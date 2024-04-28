@@ -7,8 +7,8 @@ INSERT IGNORE INTO role (role_id, role_name, role_is_active) VAlUE (3, 'guest', 
 /* End */
 
 /* Table User */
-INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role_id) value (1, 'giangnam.17122002@gmail.com', '12345678', true, 1);
-INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role_id) value (2, 'huutrong1101@gmail.com', '12345678', true, 2);
+INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role_id) value (1, 'giangnam.17122002@gmail.com', '$2a$10$GjVNiOcmtvW1ZEqU8uha1uG4QnpjaHvGkgZBfcJVUTRR50hZpbkk2', true, 1);
+INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role_id) value (2, 'huutrong1101@gmail.com', '$2a$10$GjVNiOcmtvW1ZEqU8uha1uG4QnpjaHvGkgZBfcJVUTRR50hZpbkk2', true, 2);
 /* End */
 
 /* Table Type (type of room) */

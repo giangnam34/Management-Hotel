@@ -335,7 +335,7 @@ public class Login extends javax.swing.JFrame {
 
         AuthenticationService authenticationService = context.getBean(AuthenticationService.class);
         // Kiểm tra nếu username và password hợp lệ (ví dụ: username là "admin" và password là "admin")
-        if (authenticationService.authentication(username,password).getStatus() > 0 || true) {
+        if (authenticationService.authentication(username,password).getStatus() > 0) {
             // Nếu hợp lệ, hiển thị thông báo đăng nhập thành công
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
             // Khởi chạy form RecDashboard

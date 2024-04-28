@@ -53,7 +53,7 @@ public class Application extends javax.swing.JFrame{
     // End of variables declaration//GEN-END:variables
     @Bean
     public CommandLineRunner demo() throws MessagingException {
-//		test.testLogin();
+		test.testLogin();
 //		test.testSendEmail();
 //		test.testForgetPassword();
 //		test.testChangePassword();
