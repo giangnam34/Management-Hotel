@@ -4,6 +4,7 @@
  */
 package com.gui.swing;
 
+import com.gui.swing.Controller.Admin.AdminDashboard;
 import com.gui.swing.Controller.Splash;
 
 import com.gui.swing.Controller.MyFrame;
@@ -40,12 +41,23 @@ public class Application extends javax.swing.JFrame{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        ConfigurableApplicationContext context = createApplicationContext(args);
+        displayMainFrame(context);
         SpringApplication.run(Application.class, args);
+    }
+
+    private static ConfigurableApplicationContext createApplicationContext(String... args) {
+        return new SpringApplicationBuilder(Application.class)
+                .headless(false)
+                .run(args);
     }
 
     private static void displayMainFrame(ConfigurableApplicationContext context) {
         SwingUtilities.invokeLater(() -> {
 //            Splash splash = new Splash(context);
+            AdminDashboard adminDashboard = new AdminDashboard();
+            adminDashboard.setVisible(true);
         });
     }
 

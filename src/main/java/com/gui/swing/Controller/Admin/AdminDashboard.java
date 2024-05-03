@@ -1,5 +1,7 @@
 package com.gui.swing.Controller.Admin;
 
+import org.springframework.stereotype.Controller;
+
 import java.awt.CardLayout;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
@@ -15,6 +17,8 @@ import java.util.Arrays;
  *
  * @author Acer
  */
+
+@Controller
 public class AdminDashboard extends javax.swing.JFrame {
 
     /**
