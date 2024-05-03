@@ -53,7 +53,7 @@ public class Test {
 
 
     public void testLogin(){
-        System.out.println(authenticationService.authentication("giangnam17122002@gmail.com","giangnam123").getMessage());
+        System.out.println(authenticationService.authentication("giangnam.17122002@gmail.com","12345678").getMessage());
 
     }
     public void testSendEmail() throws MessagingException {

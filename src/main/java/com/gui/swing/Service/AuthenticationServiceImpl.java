@@ -60,6 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!passwordEncoder.matches(password,user.getUserPassword())){
             authenticationMessage.setStatus(-1);
             authenticationMessage.setMessage("Tài khoản hoặc mật khẩu không đúng!");
+            return authenticationMessage;
         }
         authenticationMessage.setStatus(ValidationService.isAdmin(user) ? 1 : 2);
         authenticationMessage.setMessage("Đăng nhập thành công!");
