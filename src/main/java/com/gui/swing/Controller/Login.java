@@ -162,8 +162,6 @@ public class Login extends javax.swing.JFrame {
 
         jPanel7.setPreferredSize(new java.awt.Dimension(250, 50));
 
-//        AuthenticationService authenticationService = context.getBean(AuthenticationService.class);
-//        jLabel3.setText(authenticationService.encodePassword("giangnam"));
         jLabel3.setText("EMAIL: ");
 
         inputEmail.setToolTipText("");
