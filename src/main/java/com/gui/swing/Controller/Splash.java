@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
  *
  * @author huutr
  */
-@Controller
+//@Controller
 public class Splash extends javax.swing.JFrame {
     // Khai báo biến progressValue để lưu giá trị của thanh progress
 

@@ -337,7 +337,8 @@ public class Login extends javax.swing.JFrame {
             // Nếu hợp lệ, hiển thị thông báo đăng nhập thành công
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
             // Khởi chạy form RecDashboard
-            RecDashboard recDashboard = new RecDashboard(context);
+//            RecDashboard recDashboard = new RecDashboard(context);
+            RecDashboard recDashboard = new RecDashboard();
             recDashboard.setVisible(true);
             // Đóng form hiện tại (form đăng nhập)
             this.dispose();
