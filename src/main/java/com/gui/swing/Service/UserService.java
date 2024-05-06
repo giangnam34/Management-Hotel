@@ -86,6 +86,23 @@ public class UserService {
 
     // Update user
 
+    public GeneralResponse updateUser(String userName, String fullName, String phone){
+        GeneralResponse generalResponse = new GeneralResponse();
+        try {
+            User user = findUserByName(userName);
+            user.setFullName(fullName);
+            user.setPhone(phone);
+            userRepository.save(user);
+            generalResponse.setStatus(1);
+            generalResponse.setMessage("Cập nhật thông tin thành công!");
+            return generalResponse;
+        } catch (IllegalArgumentException | DataAccessException exception){
+            generalResponse.setStatus(-1);
+            generalResponse.setMessage(exception.getMessage());
+            return generalResponse;
+        }
+    }
+
     public Boolean updateStatusUser(String userName){
         try{
             User user = findUserByName(userName);

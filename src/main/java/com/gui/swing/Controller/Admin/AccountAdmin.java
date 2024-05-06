@@ -5,6 +5,7 @@
 package com.gui.swing.Controller.Admin;
 
 import com.gui.swing.DTO.UserDTO;
+import com.gui.swing.Entity.User;
 import com.gui.swing.Service.UserService;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -92,16 +93,22 @@ public class AccountAdmin extends javax.swing.JPanel {
     // Button Renderer
     public class ButtonRenderer extends JPanel implements TableCellRenderer {
 
+        protected JButton moreInfoButton;
+
         protected JButton editButton;
+
         protected JButton deleteButton;
 
+
         public ButtonRenderer() {
-            editButton = new JButton("See more");
+            moreInfoButton = new JButton("See more");
+            editButton = new JButton("Edit");
             deleteButton = new JButton("Change status");
             setOpaque(true);
 
             // Thiết lập layout cho panel
             this.setLayout(new FlowLayout(FlowLayout.CENTER));
+            this.add(moreInfoButton);
             this.add(editButton);
             this.add(deleteButton);
         }
@@ -117,36 +124,68 @@ public class AccountAdmin extends javax.swing.JPanel {
     public class ButtonEditor extends DefaultCellEditor {
 
         protected JPanel panel;
+        protected JButton moreInfoButton;
+
         protected JButton editButton;
+
         protected JButton deleteButton;
 
         public ButtonEditor(JCheckBox checkBox) {
             super(checkBox);
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            editButton = new JButton("See more");
+            moreInfoButton = new JButton("See more");
+            editButton = new JButton("Edit");
             deleteButton = new JButton("Change status");
 
+            panel.add(moreInfoButton);
             panel.add(editButton);
             panel.add(deleteButton);
 
             // Bắt sự kiện cho nút Edit
+            moreInfoButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // Lấy dữ liệu từ bảng
+                    int selectedRow = tableContent.getSelectedRow();
+                    System.out.println(selectedRow);
+                    if (selectedRow >= 0) {
+                        String userName = tableContent.getModel().getValueAt(selectedRow, 1).toString();
+                        System.out.println(userName);
+                        UserService userService = context.getBean(UserService.class);
+                        User user = userService.findUserByName(userName);
+                        // Tạo đối tượng EditAccount và set dữ liệu
+                        MoreInfoAccount moreInfoAccount = new MoreInfoAccount();
+                        moreInfoAccount.setFieldData(user.getUserName(), user.getFullName(), user.getPhone(), user.getRole().getRoleName().toUpperCase(), user.getIdentificationCard(), String.valueOf(user.getUserIsActive()).toUpperCase()); // giả sử bạn đã viết phương thức này trong EditAccount
+//
+//                        // Hiển thị frame
+                        moreInfoAccount.setLocationRelativeTo(null); // để vị trí ở giữa màn hình
+                        moreInfoAccount.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Please select an account to edit.",
+                                "No Selection",
+                                JOptionPane.WARNING_MESSAGE
+                        );
+                    }
+                }
+            });
+
+
             editButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     // Lấy dữ liệu từ bảng
                     int selectedRow = tableContent.getSelectedRow();
+                    System.out.println(selectedRow);
                     if (selectedRow >= 0) {
-                        String id = tableModel.getValueAt(selectedRow, 0).toString();
-                        String firstName = tableModel.getValueAt(selectedRow, 1).toString();
-                        String lastName = tableModel.getValueAt(selectedRow, 2).toString();
-                        String phone = tableModel.getValueAt(selectedRow, 3).toString();
-                        String cccd = tableModel.getValueAt(selectedRow, 4).toString();
-                        String email = tableModel.getValueAt(selectedRow, 5).toString();
-
+                        String userName = tableContent.getModel().getValueAt(selectedRow, 1).toString();
+                        System.out.println(userName);
+                        UserService userService = context.getBean(UserService.class);
+                        User user = userService.findUserByName(userName);
                         // Tạo đối tượng EditAccount và set dữ liệu
-                        EditAccount editAccountFrame = new EditAccount();
-                        editAccountFrame.setFieldData(id, firstName, lastName, phone, cccd, email); // giả sử bạn đã viết phương thức này trong EditAccount
-
-                        // Hiển thị frame
+                        EditAccount editAccountFrame = new EditAccount(context);
+                        editAccountFrame.setFieldData(user.getUserName(), user.getFullName(), user.getPhone(), user.getRole().getRoleName().toUpperCase(), user.getIdentificationCard(), String.valueOf(user.getUserIsActive()).toUpperCase()); // giả sử bạn đã viết phương thức này trong EditAccount
+//
+//                        // Hiển thị frame
                         editAccountFrame.setLocationRelativeTo(null); // để vị trí ở giữa màn hình
                         editAccountFrame.setVisible(true);
                     } else {
