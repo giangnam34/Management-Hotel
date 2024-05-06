@@ -32,8 +32,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private OTPCodeRepository otpCodeRepository;
+    
+    private final OTPCodeRepository otpCodeRepository;
 
     private AnnotationConfigApplicationContext context;
 
@@ -82,13 +82,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             generalResponse.setMessage("Có lỗi xảy ra trong quá trình gửi mail. Vui lòng thử lại!");
             return generalResponse;
         }
-        OTPCode otpCode = new OTPCode();
         User user = userRepository.findByUserName(email);
-        System.out.println(user.getUserId());
+        OTPCode otpCode = otpCodeRepository.findByUserUserId(user.getUserId());
+        if (otpCode == null) otpCode = new OTPCode();
         otpCode.setCreatedTime(LocalDateTime.now());
         otpCode.setValue(resultSendEmail);
         otpCode.setUser(user);
-        otpCode.setId(user.getUserId());
         otpCodeRepository.save(otpCode);
         generalResponse.setStatus(1);
         generalResponse.setMessage("Gửi mã xác nhận thành công!");
@@ -106,7 +105,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public int sendConfirmationCode(String email) throws MessagingException {
         Map<String,Object> context = new HashMap<>();
-        int confirmationCode = GeneralService.generateConfirmationCode(100000,999999);
+        int confirmationCode = GeneralService.generateConfirmationCode(1000,9999);
 //        confirmationCode = 123456;
         context.put("ConfirmationCode",confirmationCode);
         GeneralResponse result = emailService.sendMessageUsingThymeleafTemplate(new SendEmailRequest(email,"Confirmation Code",context));

@@ -13,14 +13,24 @@ import javax.swing.Timer;
 import javax.swing.JOptionPane;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.gui.swing.Service.EmailService;
+import com.gui.swing.DTO.Request.SendEmailRequest;
+import com.gui.swing.DTO.Response.GeneralResponse;
+import com.gui.swing.Service.Interface.AuthenticationService;
+import jakarta.mail.MessagingException;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  *
  * @author huutr
  */
 public class ForgetPassword extends javax.swing.JFrame {
-    
-     class EnterKeyListener implements KeyListener {
+
+    // Inject EmailService nếu đang sử dụng Spring
+    private ConfigurableApplicationContext context;
+
+    class EnterKeyListener implements KeyListener {
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -44,10 +54,20 @@ public class ForgetPassword extends javax.swing.JFrame {
     /**
      * Creates new form RecDashboard
      */
+    public ForgetPassword(ConfigurableApplicationContext context) {
+        this.context = context;
+        initComponents();
+        setLocationRelativeTo(null);
+
+        inputEmail.addKeyListener(new ForgetPassword.EnterKeyListener());
+
+        inputEmail.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email");
+    }
+
     public ForgetPassword() {
         initComponents();
         setLocationRelativeTo(null);
-        
+
         inputEmail.addKeyListener(new ForgetPassword.EnterKeyListener());
 
         inputEmail.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email");
@@ -61,53 +81,42 @@ public class ForgetPassword extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
 
     private void sendButtonClicked() {
-       String email = inputEmail.getText().trim();
-        // Kiểm tra xem trường email có trống không
+        AuthenticationService authenticationService = context.getBean(AuthenticationService.class);
+        String email = inputEmail.getText().trim();
+
         if (email.isEmpty()) {
-            // Hiển thị thông báo lỗi
             JOptionPane.showMessageDialog(this, "Email cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Không thực hiện gửi email nếu trống
+            return;
         }
 
-        // Kiểm tra định dạng email
         if (!isValidEmail(email)) {
-            // Hiển thị thông báo lỗi nếu email không đúng định dạng
             JOptionPane.showMessageDialog(this, "Invalid email format", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Không thực hiện gửi email nếu định dạng không đúng
+            return;
         }
-        
-        
 
-        btnSend.setText("Sending..."); // Thay đổi chữ của nút SEND thành "Sending..."
-        btnSend.setEnabled(false); // Vô hiệu hóa nút khi người dùng nhấn
-        startCountdown();
+        btnSend.setText("Sending...");
+        btnSend.setEnabled(false);
 
-        // Thêm logic của bạn ở đây để xử lý việc gửi email
-    }
-    
-     private void openOTPConfirmForm() {
-        // Giả định bạn đã có một instance của form OTPConfirm
-        // Giả sử là otpConfirmForm là biến cho form "OTPConfirm"
-        OTP otpConfirmForm = new OTP(); // Tạo mới form OTPConfirm hoặc sử dụng form đã có
-        otpConfirmForm.setVisible(true); // Hiển thị form OTPConfirm
-    }
+        try {
+            GeneralResponse response = authenticationService.forgetPassword(email);
+            if (response.getStatus() == 1) {
+                JOptionPane.showMessageDialog(this, response.getMessage(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                
+                ForgetPassword.this.dispose();
 
-    private void startCountdown() {
-        countDownSeconds = 3; // Thiết lập thời gian đếm ngược là 3 giây
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                countDownSeconds--;
-                if (countDownSeconds <= 0) {
-                    stopCountdown();
-                    ForgetPassword.this.setVisible(false); // Ẩn form ForgetPassword
-                    openOTPConfirmForm(); // Hiển thị form OTPConfirm
-                }
+                OTP otpConfirmForm = new OTP(context,email); // Tạo mới form OTPConfirm hoặc sử dụng form đã có
+                otpConfirmForm.setVisible(true); // Hiển thị form OTPConfirm
+            } else {
+                JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        });
-        timer.start();
+        } catch (MessagingException e) {
+            JOptionPane.showMessageDialog(this, "Failed to send email. Please try again later.", "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        } finally {
+            btnSend.setEnabled(true);
+            btnSend.setText("Send");
+        }
     }
-
     private void stopCountdown() {
         timer.stop();
         countDownSeconds = 30; // Reset lại thời gian đếm ngược
@@ -115,7 +124,7 @@ public class ForgetPassword extends javax.swing.JFrame {
         btnSend.setText("Send");
     }
 
-     private boolean isValidEmail(String email) {
+    private boolean isValidEmail(String email) {
         // Biểu thức chính quy để kiểm tra định dạng email
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);

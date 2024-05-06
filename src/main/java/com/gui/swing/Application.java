@@ -55,9 +55,10 @@ public class Application extends javax.swing.JFrame{
 
     private static void displayMainFrame(ConfigurableApplicationContext context) {
         SwingUtilities.invokeLater(() -> {
-//            Splash splash = new Splash(context);
-            AdminDashboard adminDashboard = new AdminDashboard();
-            adminDashboard.setVisible(true);
+            Splash splash = new Splash(context);
+            splash.setVisible(true);
+//            AdminDashboard adminDashboard = new AdminDashboard();
+//            adminDashboard.setVisible(true);
         });
     }
 

@@ -4,7 +4,11 @@
  */
 package com.gui.swing.Controller;
 
+import com.gui.swing.DTO.Request.ChangePasswordRequest;
+import com.gui.swing.DTO.Response.GeneralResponse;
+import com.gui.swing.Service.Interface.AuthenticationService;
 import javax.swing.JOptionPane;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  *
@@ -12,13 +16,25 @@ import javax.swing.JOptionPane;
  */
 public class ResetPassword extends javax.swing.JFrame {
 
+    private ConfigurableApplicationContext context;
+
+    private String email;
+
     /**
      * Creates new form ResetPassword
      */
     public ResetPassword() {
         initComponents();
-        
-         setLocationRelativeTo(null);
+
+        setLocationRelativeTo(null);
+    }
+
+    public ResetPassword(ConfigurableApplicationContext context,String email) {
+        this.context = context;
+        this.email = email;
+        initComponents();
+
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -149,6 +165,38 @@ public class ResetPassword extends javax.swing.JFrame {
         String password = new String(inputPassword.getPassword());
         String confirmPassword = new String(inputConfirmPassword.getPassword()); // Lấy password dưới dạng String
 
+        if (!password.equals(confirmPassword)) {
+            // Nếu không, hiển thị thông báo lỗi và không tiếp tục
+            JOptionPane.showMessageDialog(this,
+                    "Mật khẩu và xác nhận mật khẩu không trùng nhau!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        AuthenticationService authService = context.getBean(AuthenticationService.class);
+
+        GeneralResponse response = authService.changePassword(new ChangePasswordRequest(email, password, confirmPassword));
+
+        if (response.getStatus() == 1) {
+            // Thành công
+            JOptionPane.showMessageDialog(this,
+                    response.getMessage(),
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new Login(context).setVisible(true); // Mở form đăng nhập
+                    ResetPassword.this.dispose(); // Đóng form ResetPassword
+                }
+            });
+        } else {
+            // Thất bại, hiển thị thông báo lỗi từ phía service
+            JOptionPane.showMessageDialog(this,
+                    response.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnSendActionPerformed
 
     /**
@@ -181,7 +229,7 @@ public class ResetPassword extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ResetPassword().setVisible(true);
+                 new ResetPassword().setVisible(true);
             }
         });
     }
