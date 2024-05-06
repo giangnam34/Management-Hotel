@@ -4,6 +4,8 @@
  */
 package com.gui.swing.Controller;
 
+import com.gui.swing.Controller.Rec.RecDashboard;
+import com.gui.swing.Controller.Admin.AdminDashboard;
 import com.gui.swing.Service.Interface.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -24,6 +26,7 @@ import java.awt.event.KeyListener;
 public class Login extends javax.swing.JFrame {
 
     private ConfigurableApplicationContext context;
+
     class EnterKeyListener implements KeyListener {
 
         @Override
@@ -162,8 +165,6 @@ public class Login extends javax.swing.JFrame {
 
         jPanel7.setPreferredSize(new java.awt.Dimension(250, 50));
 
-//        AuthenticationService authenticationService = context.getBean(AuthenticationService.class);
-//        jLabel3.setText(authenticationService.encodePassword("giangnam"));
         jLabel3.setText("EMAIL: ");
 
         inputEmail.setToolTipText("");
@@ -335,17 +336,19 @@ public class Login extends javax.swing.JFrame {
 
         AuthenticationService authenticationService = context.getBean(AuthenticationService.class);
         // Kiểm tra nếu username và password hợp lệ (ví dụ: username là "admin" và password là "admin")
-        if (authenticationService.authentication(username,password).getStatus() > 0) {
+        if (authenticationService.authentication(username, password).getStatus() > 0) {
             // Nếu hợp lệ, hiển thị thông báo đăng nhập thành công
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
-            // Khởi chạy form RecDashboard
-//            RecDashboard recDashboard = new RecDashboard(context);
-            RecDashboard recDashboard = new RecDashboard();
-            recDashboard.setVisible(true);
-            // Đóng form hiện tại (form đăng nhập)
+
+            if (authenticationService.authentication(username, password).getStatus()== 1) {
+                AdminDashboard adminDashboard = new AdminDashboard();
+                adminDashboard.setVisible(true);
+            } else if (authenticationService.authentication(username, password).getStatus() == 2) {
+                RecDashboard recDashboard = new RecDashboard();
+                recDashboard.setVisible(true);
+            }
             this.dispose();
         } else {
-            // Nếu không hợp lệ, hiển thị thông báo lỗi
             JOptionPane.showMessageDialog(this, "Đăng nhập thất bại. Vui lòng kiểm tra lại username và password.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }     // TODO add your handling code here:
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -359,7 +362,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_inputEmailActionPerformed
 
     private void btnForgetPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnForgetPasswordMouseClicked
-        ForgetPassword forgetPasswordForm = new ForgetPassword();
+        ForgetPassword forgetPasswordForm = new ForgetPassword(context);
         forgetPasswordForm.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_btnForgetPasswordMouseClicked
 
