@@ -4,8 +4,14 @@
  */
 package com.gui.swing.Controller.Admin;
 
+import com.gui.swing.DTO.Request.AddNewUserRequest;
+import com.gui.swing.DTO.Response.GeneralResponse;
+import com.gui.swing.Service.UserService;
+import org.springframework.context.ConfigurableApplicationContext;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,15 +21,27 @@ import javax.swing.JFrame;
  *
  * @author Acer
  */
-public class AddNewAcount extends javax.swing.JFrame {
+public class AddNewAccount extends javax.swing.JFrame {
 
     /**
      * Creates new form AddNewAcount
      */
-    public AddNewAcount() {
+    private ConfigurableApplicationContext context;
+
+    public AddNewAccount(){
+
+    }
+    public AddNewAccount(ConfigurableApplicationContext context) {
+        this.context = context;
         initComponents();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        int random = new Random().nextInt();
+        this.inputUserName.setText("giangnam.17122002" + random +  "@gmail.com");
+        this.inputPassword.setText("Giangnam1@");
+        this.inputCCCD.setText("051202007648" + random);
+        this.inputPhone.setText("0968322444");
+        this.inputFullName.setText("Vo Giang Nam");
     }
 
     private boolean isValidEmail(String email) {
@@ -34,10 +52,11 @@ public class AddNewAcount extends javax.swing.JFrame {
     }
 
     private boolean isValidPhone(String phone) {
-        String phoneRegex = "^\\d{10}$";
-        Pattern pattern = Pattern.compile(phoneRegex);
-        Matcher matcher = pattern.matcher(phone);
-        return matcher.matches();
+//        String phoneRegex = "/(84|0[3|5|7|8|9])+([0-9]{8})\\b/g";
+//        Pattern pattern = Pattern.compile(phoneRegex);
+//        Matcher matcher = pattern.matcher(phone);
+//        return matcher.matches();
+        return true;
     }
 
     /**
@@ -52,19 +71,19 @@ public class AddNewAcount extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        inputFirstName = new javax.swing.JTextField();
+        inputUserName = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        inputLastName = new javax.swing.JTextField();
+        inputPassword = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        inputEmail = new javax.swing.JTextField();
+        inputCCCD = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         inputPhone = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        inputCCCD = new javax.swing.JTextField();
+        inputFullName = new javax.swing.JTextField();
         btnCreate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -72,7 +91,7 @@ public class AddNewAcount extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("ADD NEW ACCOUNT");
 
-        jLabel2.setText("First Name:");
+        jLabel2.setText("User Name:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -82,16 +101,16 @@ public class AddNewAcount extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(inputFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
+                .addComponent(inputUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(inputFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                .addComponent(inputUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                 .addComponent(jLabel2))
         );
 
-        jLabel3.setText("Last Name:");
+        jLabel3.setText("Password:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -101,16 +120,16 @@ public class AddNewAcount extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(inputLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
+                .addComponent(inputPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(inputLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                .addComponent(inputPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                 .addComponent(jLabel3))
         );
 
-        jLabel4.setText("Email:");
+        jLabel4.setText("CCCD:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -120,12 +139,12 @@ public class AddNewAcount extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(inputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(inputCCCD, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(inputEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                .addComponent(inputCCCD, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                 .addComponent(jLabel4))
         );
 
@@ -148,7 +167,7 @@ public class AddNewAcount extends javax.swing.JFrame {
                 .addComponent(jLabel5))
         );
 
-        jLabel6.setText("CCCD:");
+        jLabel6.setText("Full Name:");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -158,12 +177,12 @@ public class AddNewAcount extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(inputCCCD, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(inputFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(inputCCCD, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                .addComponent(inputFullName, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                 .addComponent(jLabel6))
         );
 
@@ -226,19 +245,19 @@ public class AddNewAcount extends javax.swing.JFrame {
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // Lấy thông tin từ các fields nhập liệu
-        String firstName = inputFirstName.getText().trim();
-        String lastName = inputLastName.getText().trim();
-        String email = inputEmail.getText().trim();
+        String userName = inputUserName.getText().trim();
+        String password = inputPassword.getText().trim();
+        String CCCD = inputCCCD.getText().trim();
         String phone = inputPhone.getText().trim();
-        String cccd = inputCCCD.getText().trim();
+        String fullName = inputFullName.getText().trim();
 
         // Kiểm tra các trường nhập liệu có trống không
-        if (firstName.isEmpty() || lastName.isEmpty()
-                || email.isEmpty() || phone.isEmpty()
-                || cccd.isEmpty()) {
+        if (userName.isEmpty() || password.isEmpty()
+                || CCCD.isEmpty() || phone.isEmpty()
+                || fullName.isEmpty()) {
             // Hiển thị thông báo lỗi
             JOptionPane.showMessageDialog(this, "Create Error: All fields must be filled out.");
-        } else if (!isValidEmail(email)) {
+        } else if (!isValidEmail(userName)) {
             // Hiển thị thông báo lỗi email không hợp lệ
             JOptionPane.showMessageDialog(this, "Create Error: Invalid email format.");
         } else if (!isValidPhone(phone)) {
@@ -246,6 +265,13 @@ public class AddNewAcount extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Create Error: Invalid phone number format.");
         } else {
             // Disable nút Create để người dùng không nhấn lại trong khi xử lý
+//            System.out.println(userName);
+//            System.out.println(password);
+//            System.out.println(CCCD);
+//            System.out.println(phone);
+//            System.out.println(fullName);
+            UserService userService = context.getBean(UserService.class);
+            GeneralResponse generalResponse = userService.addNewUser(new AddNewUserRequest(userName,password,phone,fullName,CCCD));
             btnCreate.setEnabled(false);
             btnCreate.setText("Creating...");
 
@@ -253,9 +279,9 @@ public class AddNewAcount extends javax.swing.JFrame {
                 @Override
                 protected String doInBackground() throws Exception {
                     // Giả lập thời gian chờ đợi làm nhiệm vụ nào đó trong 5 giây
-                    Thread.sleep(5000);
+//                    Thread.sleep(5000);
                     // Kết thúc công việc, trả về giá trị cho phương thức done()
-                    return "Create Success";
+                    return generalResponse.getMessage();
                 }
 
                 @Override
@@ -299,30 +325,30 @@ public class AddNewAcount extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddNewAcount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddNewAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddNewAcount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddNewAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddNewAcount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddNewAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddNewAcount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddNewAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddNewAcount().setVisible(true);
+                new AddNewAccount().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
+    private javax.swing.JTextField inputFullName;
     private javax.swing.JTextField inputCCCD;
-    private javax.swing.JTextField inputEmail;
-    private javax.swing.JTextField inputFirstName;
-    private javax.swing.JTextField inputLastName;
+    private javax.swing.JTextField inputUserName;
+    private javax.swing.JTextField inputPassword;
     private javax.swing.JTextField inputPhone;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

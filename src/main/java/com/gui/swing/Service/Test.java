@@ -58,7 +58,7 @@ public class Test {
     }
     public void testSendEmail() throws MessagingException {
         Map<String,Object> context = new HashMap<>();
-        context.put("text",123);
+        context.put("text","giangnam");
         GeneralResponse generalResponse = emailService.sendMessageUsingThymeleafTemplate(new SendEmailRequest("giangnam.17122002@gmail.com", "Confirmation code", context));
         System.out.println(generalResponse.getMessage());
     }

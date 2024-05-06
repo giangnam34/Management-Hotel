@@ -1,5 +1,6 @@
 package com.gui.swing.Controller.Admin;
 
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.awt.CardLayout;
@@ -26,10 +27,15 @@ public class AdminDashboard extends javax.swing.JFrame {
      */
     CardLayout cardLayout;
 
-    public AdminDashboard() {
+    private ConfigurableApplicationContext context;
+
+    public AdminDashboard(){
+    }
+    public AdminDashboard(ConfigurableApplicationContext context) {
         initComponents();
         setLocationRelativeTo(null);
         cardLayout = (CardLayout) pnlCards.getLayout();
+        this.context = context;
     }
 
     /**
@@ -152,7 +158,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         btnCustomer.setText("CUSTOMER");
         btnCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCustomerActionPerformed(evt);
+                try {
+                    btnCustomerActionPerformed(evt);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -608,8 +618,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         cardLayout.show(pnlCards, "pnlCard5");
     }//GEN-LAST:event_btnIncomeActionPerformed
 
-    private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
-        CustomerAdmin cusTomerPanel = new CustomerAdmin(); // Tạo instance của JPanel chứa thông tin danh sách phòng
+    private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) throws IllegalAccessException {//GEN-FIRST:event_btnCustomerActionPerformed
+        CustomerAdmin cusTomerPanel = new CustomerAdmin(context); // Tạo instance của JPanel chứa thông tin danh sách phòng
         pnlCard3.setLayout(new BorderLayout()); // Set layout cho pnlCard2
         pnlCard3.removeAll(); // Xóa tất cả các components hiện đang có (nếu có)
         pnlCard3.add(cusTomerPanel, BorderLayout.CENTER); // Thêm roomListPanel vào pnlCard2
@@ -629,7 +639,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReservationActionPerformed
 
     private void btnAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountActionPerformed
-        AccountAdmin accountPanel = new AccountAdmin(); // Tạo instance của JPanel chứa thông tin danh sách phòng
+        AccountAdmin accountPanel = new AccountAdmin(context); // Tạo instance của JPanel chứa thông tin danh sách phòng
         pnlCard5.setLayout(new BorderLayout()); // Set layout cho pnlCard2
         pnlCard5.removeAll(); // Xóa tất cả các components hiện đang có (nếu có)
         pnlCard5.add(accountPanel, BorderLayout.CENTER); // Thêm roomListPanel vào pnlCard2

@@ -7,8 +7,10 @@ INSERT IGNORE INTO role (role_id, role_name, role_is_active) VAlUE (3, 'guest', 
 /* End */
 
 /* Table User */
-INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role_id) value (1, 'giangnam.17122002@gmail.com', '$2a$10$GjVNiOcmtvW1ZEqU8uha1uG4QnpjaHvGkgZBfcJVUTRR50hZpbkk2', true, 1);
-INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role_id) value (2, 'huutrong1101@gmail.com', '$2a$10$GjVNiOcmtvW1ZEqU8uha1uG4QnpjaHvGkgZBfcJVUTRR50hZpbkk2', true, 2);
+INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role_id, full_name, identification_card, phone) value (1, 'giangnam.17122002@gmail.com', '$2a$10$GjVNiOcmtvW1ZEqU8uha1uG4QnpjaHvGkgZBfcJVUTRR50hZpbkk2', true, 1, 'Vo Giang Nam', '051202007648', '0968322444');
+INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role_id, full_name, identification_card, phone) value (2, 'huutrong1101@gmail.com', '$2a$10$GjVNiOcmtvW1ZEqU8uha1uG4QnpjaHvGkgZBfcJVUTRR50hZpbkk2', true, 2, 'Nguyen Huu Trong', '051202007649', '0968322555');
+INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role_id, full_name, identification_card, phone) value (3, 'giangnam.1712@gmail.com', '$2a$10$GjVNiOcmtvW1ZEqU8uha1uG4QnpjaHvGkgZBfcJVUTRR50hZpbkk2', true, 2, 'Vo Giang Nam 2', '051202007650', '0968322666');
+
 /* End */
 
 /* Table Type (type of room) */
@@ -151,8 +153,8 @@ INSERT IGNORE INTO room_info (room_id, room_info_id, key_room_info, value_room_i
 /* End */
 
 /* Table guest */
-INSERT IGNORE INTO guest (id, full_name, identification_card) value (1, 'Vo Giang Nam', '12345678');
-INSERT IGNORE INTO guest (id, full_name, identification_card) value (2, 'Vo Giang Nam', '123456789');
+INSERT IGNORE INTO guest (id, email, first_name, identification_card, last_name, phone) value (1, 'giangnam.17122002@gmail.com', 'Vo Giang', '123456789' , 'Nam', '0968322444');
+INSERT IGNORE INTO guest (id, email, first_name, identification_card, last_name, phone) value (2, 'giangnam.17122002@gmail.com', 'Nguyen Huu', '12345678' , 'Trong', '0968322555');
 
 /* End */
 

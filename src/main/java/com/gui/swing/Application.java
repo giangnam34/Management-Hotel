@@ -44,7 +44,7 @@ public class Application extends javax.swing.JFrame{
 
         ConfigurableApplicationContext context = createApplicationContext(args);
         displayMainFrame(context);
-        SpringApplication.run(Application.class, args);
+//        SpringApplication.run(Application.class, args);
     }
 
     private static ConfigurableApplicationContext createApplicationContext(String... args) {
@@ -55,8 +55,7 @@ public class Application extends javax.swing.JFrame{
 
     private static void displayMainFrame(ConfigurableApplicationContext context) {
         SwingUtilities.invokeLater(() -> {
-//            Splash splash = new Splash(context);
-            AdminDashboard adminDashboard = new AdminDashboard();
+            AdminDashboard adminDashboard = new AdminDashboard(context);
             adminDashboard.setVisible(true);
         });
     }
@@ -65,7 +64,7 @@ public class Application extends javax.swing.JFrame{
     // End of variables declaration//GEN-END:variables
     @Bean
     public CommandLineRunner demo() throws MessagingException {
-		test.testLogin();
+//		test.testLogin();
 //		test.testSendEmail();
 //		test.testForgetPassword();
 //		test.testChangePassword();

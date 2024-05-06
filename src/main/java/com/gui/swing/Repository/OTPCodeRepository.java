@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OTPCodeRepository extends JpaRepository<OTPCode, Long> {
+
+    public OTPCode findByUserUserId(int userId);
 }

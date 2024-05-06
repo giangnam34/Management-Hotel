@@ -4,8 +4,16 @@
  */
 package com.gui.swing.Controller.Admin;
 
+import com.gui.swing.Entity.Guest;
+import com.gui.swing.Service.GuestService;
+import org.springframework.context.ConfigurableApplicationContext;
+
+import java.awt.desktop.ScreenSleepEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -14,12 +22,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CustomerAdmin extends javax.swing.JPanel {
 
+    private ConfigurableApplicationContext context;
     /**
      * Creates new form CustomerAdmin
      */
-    public CustomerAdmin() {
+    public CustomerAdmin(ConfigurableApplicationContext context) throws IllegalAccessException {
+        this.context = context;
         initComponents();
-        populateTable();
+        populateTable("","");
 
         btnSearch.addActionListener(new ActionListener() {
             @Override
@@ -27,28 +37,51 @@ public class CustomerAdmin extends javax.swing.JPanel {
                 String searchText = inputSearch.getText();
                 String searchType = String.valueOf(typeSearch.getSelectedItem());
                 // Thực hiện tìm kiếm tại đây
+                populateTable(searchText,searchType);
                 System.out.println("Search Text: " + searchText + ", Search Type: " + searchType);
             }
         });
+
+        btnReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inputSearch.setText("");
+                populateTable("","");
+            }
+        });
+
     }
 
-    private void populateTable() {
-        // Tạo ra một mảng giá trị để hiển thị trong table, với mỗi sub-array đại diện cho một hàng
-        Object[][] data = {
-            {"1", "John", "Doe", "123456789", "CCCD001", "john@example.com"},
-            {"2", "Jane", "Smith", "987654321", "CCCD002", "jane@example.com"}, // thêm các hàng khác tại đây
-        };
 
+
+    private void populateTable(String searchText, String searchType) {
+        List<Guest> guestList = getDataGuest(searchText, searchType);
+        Object[][] data = new Object[guestList.size()][Guest.class.getDeclaredFields().length];
+        Object[] columnName = Arrays.stream(Guest.class.getDeclaredFields()).map(field -> field.getName().toUpperCase()).toArray();
+        for(int i = 0; i < guestList.size(); i++){
+            data[i][0] = guestList.get(i).getId();
+            data[i][1] = guestList.get(i).getFirstName();
+            data[i][2] = guestList.get(i).getLastName();
+            data[i][3] = guestList.get(i).getPhone();
+            data[i][4] = guestList.get(i).getEmail();
+            data[i][5] = guestList.get(i).getIdentificationCard();
+        }
         // Tạo ra một model mới với dữ liệu và các tiêu đề của cột
         DefaultTableModel model = new DefaultTableModel(
                 data,
-                new String[]{"ID", "First Name", "Last Name", "Phone", "CCCD", "Email"}
+                columnName
         );
 
         // Set model cho jTable1
         userTable.setModel(model);
     }
 
+    private List<Guest> getDataGuest(String searchText, String searchType){
+        GuestService guestService = context.getBean(GuestService.class);
+        if (searchText.isEmpty() && searchType.isEmpty())
+            return guestService.listAllGuest();
+        return guestService.listGuestWithFilter(searchText,searchType);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

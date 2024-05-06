@@ -4,12 +4,17 @@
  */
 package com.gui.swing.Controller.Admin;
 
+import com.gui.swing.DTO.UserDTO;
+import com.gui.swing.Service.UserService;
+import org.springframework.context.ConfigurableApplicationContext;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -20,43 +25,68 @@ public class AccountAdmin extends javax.swing.JPanel {
     /**
      * Creates new form AccountAdmin
      */
+
+    private ConfigurableApplicationContext context;
     private DefaultTableModel tableModel;
 
-    public AccountAdmin() {
+    public AccountAdmin(){
+
+    }
+    public AccountAdmin(ConfigurableApplicationContext context) {
+        this.context = context;
         initComponents();
-        customizeTable();
+        populateTable("", "");
+
+        btnSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = inputSearch.getText();
+                String searchType = String.valueOf(typeSearch.getSelectedItem());
+                // Thực hiện tìm kiếm tại đây
+                populateTable(searchText,searchType);
+                System.out.println("Search Text: " + searchText + ", Search Type: " + searchType);
+            }
+        });
+
+        btnReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inputSearch.setText("");
+                populateTable("","");
+            }
+        });
     }
 
-    private void customizeTable() {
-        // Set up Table Model
-        tableModel = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                // Cho phép cột "Action" có thể edit để chứa các button
-                return column == 6;
-            }
-        };
+    private void populateTable(String searchText, String searchType) {
 
-        // Add columns to your table model
-        tableModel.addColumn("ID");
-        tableModel.addColumn("First Name");
-        tableModel.addColumn("Last Name");
-        tableModel.addColumn("Phone");
-        tableModel.addColumn("CCCD");
-        tableModel.addColumn("Email");
-        tableModel.addColumn("Action");
+        List<UserDTO> accountList = getDataAccount(searchText, searchType);
+        Object[][] data = new Object[accountList.size()][UserDTO.class.getDeclaredFields().length];
+        Object[] columnName = Arrays.stream(UserDTO.class.getDeclaredFields()).map(field -> field.getName().toUpperCase()).toArray();
+        for(int i = 0; i < accountList.size(); i++){
+            data[i][0] = accountList.get(i).getId();
+            data[i][1] = accountList.get(i).getUserName();
+            data[i][2] = accountList.get(i).getIsActive();
+            data[i][3] = accountList.get(i).getRole();
+        }
+        DefaultTableModel model = new DefaultTableModel(
+                data,
+                columnName
+        );
 
         // Set the model to the table
-        tableContent.setModel(tableModel);
+        tableContent.setModel(model);
 
-        // Append a row
-        tableModel.addRow(new Object[]{"1", "John", "Doe", "0123456789", "111222333", "johndoe@example.com", "Edit/Delete"});
-        tableModel.addRow(new Object[]{"2", "John 1", "Doe 1", "0123456789", "111222333", "johndoe1@example.com", "Edit/Delete"});
-        tableModel.addRow(new Object[]{"3", "John 2", "Doe 2", "0123456789", "111222333", "johndoe2@example.com", "Edit/Delete"});
 
         // Add button renderer and editor
-        tableContent.getColumnModel().getColumn(6).setCellRenderer(new ButtonRenderer());
-        tableContent.getColumnModel().getColumn(6).setCellEditor(new ButtonEditor(new JCheckBox()));
+        tableContent.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
+        tableContent.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor(new JCheckBox()));
+    }
+
+    private List<UserDTO> getDataAccount(String searchText, String searchType){
+        UserService userService = context.getBean(UserService.class);
+        if (searchText.isEmpty() && searchType.isEmpty())
+            return userService.listAllUser();
+        return userService.listUserWithFilter(searchText,searchType);
     }
 
     // Button Renderer
@@ -66,8 +96,8 @@ public class AccountAdmin extends javax.swing.JPanel {
         protected JButton deleteButton;
 
         public ButtonRenderer() {
-            editButton = new JButton("Edit");
-            deleteButton = new JButton("Delete");
+            editButton = new JButton("See more");
+            deleteButton = new JButton("Change status");
             setOpaque(true);
 
             // Thiết lập layout cho panel
@@ -93,8 +123,8 @@ public class AccountAdmin extends javax.swing.JPanel {
         public ButtonEditor(JCheckBox checkBox) {
             super(checkBox);
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            editButton = new JButton("Edit");
-            deleteButton = new JButton("Delete");
+            editButton = new JButton("See more");
+            deleteButton = new JButton("Change status");
 
             panel.add(editButton);
             panel.add(deleteButton);
@@ -135,13 +165,13 @@ public class AccountAdmin extends javax.swing.JPanel {
                 public void actionPerformed(ActionEvent e) {
                     int selectedRow = tableContent.getSelectedRow();
                     if (selectedRow >= 0) {
-                        String firstName = tableContent.getModel().getValueAt(selectedRow, 1).toString();
-                        String lastName = tableContent.getModel().getValueAt(selectedRow, 2).toString();
+                        String userName = tableContent.getModel().getValueAt(selectedRow, 1).toString();
+                        String status = tableContent.getModel().getValueAt(selectedRow, 2).toString();
 
                         // Hiển thị hộp thoại xác nhận trung tâm màn hình
                         int confirm = JOptionPane.showConfirmDialog(
                                 null, // sử dụng null để hộp thoại xuất hiện ở giữa màn hình
-                                "Are you sure to delete account " + firstName + " " + lastName + "?",
+                                "Are you sure to " + (status.equalsIgnoreCase("true") ? "deactive" : "active") + " account " + userName + "?",
                                 "Confirm Delete",
                                 JOptionPane.YES_NO_OPTION,
                                 JOptionPane.QUESTION_MESSAGE
@@ -149,16 +179,27 @@ public class AccountAdmin extends javax.swing.JPanel {
 
                         if (confirm == JOptionPane.YES_OPTION) {
                             // Xóa dòng khỏi tableModel
-                            tableModel.removeRow(selectedRow);
+//                            tableModel.removeRow(selectedRow);
                             // Thêm mã để xóa khỏi database nếu cần
-
+                            UserService userService = context.getBean(UserService.class);
+                            Boolean result = userService.updateStatusUser(userName);
                             // Thông báo đã xóa thành công, lại hiển thị ở giữa màn hình
-                            JOptionPane.showMessageDialog(
-                                    null, // hiển thị ở giữa màn hình
-                                    "Account " + firstName + " " + lastName + " deleted successfully.",
-                                    "Successful",
-                                    JOptionPane.INFORMATION_MESSAGE
-                            );
+                            if (result){
+                                JOptionPane.showMessageDialog(
+                                        null, // hiển thị ở giữa màn hình
+                                        (status.equalsIgnoreCase("true") ? "Deactive" : "Active") + " account " + userName +  " successfully.",
+                                        "Successful",
+                                        JOptionPane.INFORMATION_MESSAGE
+                                );
+                                populateTable("","");
+                            } else {
+                                JOptionPane.showMessageDialog(
+                                        null, // hiển thị ở giữa màn hình
+                                        "Have some error. Please try again!!!",
+                                        "Error",
+                                        JOptionPane.ERROR_MESSAGE
+                                );
+                            }
                         }
                     } else {
                         JOptionPane.showMessageDialog(
@@ -204,7 +245,7 @@ public class AccountAdmin extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(1258, 700));
 
-        typeSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "First Name", "Last Name", "Phone", "CCCD", "Email" }));
+        typeSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "User Name", "Is Active", "Role"}));
 
         btnSearch.setBackground(new java.awt.Color(51, 153, 255));
         btnSearch.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -292,8 +333,17 @@ public class AccountAdmin extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearch1ActionPerformed
-        AddNewAcount addAccountFrame = new AddNewAcount();
+
+        AddNewAccount addAccountFrame = new AddNewAccount(context);
         addAccountFrame.setLocationRelativeTo(null); // Đặt vị trí của frame ở giữa màn hình
+        addAccountFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosed(WindowEvent e) {
+                addAccountFrame.dispose();
+                // Thực hiện các hành động sau khi cửa sổ đã đóng
+                populateTable("", "");
+            }
+        });
+//        addAccountFrame.addWindowListener(new AccountAdmin(context));
         addAccountFrame.setVisible(true);
     }//GEN-LAST:event_btnSearch1ActionPerformed
 

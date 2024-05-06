@@ -19,14 +19,24 @@ public class User {
 
     private String userPassword;
 
-    private boolean userIsActive;
+    private Boolean userIsActive;
+
+    private String phone;
+
+    private String fullName;
+
+    @Column(unique = true)
+    private String identificationCard;
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
     private OTPCode otpCode;
+
+    public User(){
+        this.userIsActive = true;
+    }
 
 }

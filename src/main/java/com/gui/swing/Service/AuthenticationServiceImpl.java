@@ -82,13 +82,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             generalResponse.setMessage("Có lỗi xảy ra trong quá trình gửi mail. Vui lòng thử lại!");
             return generalResponse;
         }
-        OTPCode otpCode = new OTPCode();
         User user = userRepository.findByUserName(email);
-        System.out.println(user.getUserId());
+        OTPCode otpCode = otpCodeRepository.findByUserUserId(user.getUserId());
+        if (otpCode == null) otpCode = new OTPCode();
         otpCode.setCreatedTime(LocalDateTime.now());
         otpCode.setValue(resultSendEmail);
         otpCode.setUser(user);
-        otpCode.setId(user.getUserId());
         otpCodeRepository.save(otpCode);
         generalResponse.setStatus(1);
         generalResponse.setMessage("Gửi mã xác nhận thành công!");
