@@ -293,11 +293,7 @@ public class EditRoomInfo extends javax.swing.JFrame {
             TypeRoomService typeRoomService = context.getBean(TypeRoomService.class);
             FloorService floorService = context.getBean(FloorService.class);
 
-            System.out.println(roomName);
-            System.out.println(roomType);
-            System.out.println(floorName);
-
-//
+          
             com.gui.swing.Entity.Type selectedType = typeRoomService.findTypeByName(EnumTypeRoom.valueOf(roomType));
             Floor selectedFloor = floorService.findFloorByName(floorName);
 

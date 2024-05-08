@@ -30,7 +30,7 @@ public class ReservationTableModel extends AbstractTableModel {
 
     private LocalDateTime localDateTime;
 
-    public ReservationTableModel(LocalDateTime localDateTime,ConfigurableApplicationContext context, int floorNumber, List<Room> roomList) {
+    public ReservationTableModel(LocalDateTime localDateTime, ConfigurableApplicationContext context, int floorNumber, List<Room> roomList) {
         this.localDateTime = localDateTime;
         this.context = context;
         this.floorNumber = floorNumber;
@@ -61,7 +61,7 @@ public class ReservationTableModel extends AbstractTableModel {
             row.add(room.getRoomName()); // Tên phòng
             for (String timeSlot : timeSlots) {
                 boolean isAvailable;
-                if (timeBegin.isBefore(LocalDateTime.now())){
+                if (timeBegin.isBefore(LocalDateTime.now())) {
                     if (timeEnd.isAfter(LocalDateTime.now())) {
                         isAvailable = !infoRoomService.isRoomRent(room.getRoomId(), LocalDateTime.now(), timeEnd);
                     } else {
@@ -76,12 +76,13 @@ public class ReservationTableModel extends AbstractTableModel {
                 LocalDateTime finalTimeEnd = timeEnd;
                 button.addActionListener((ActionEvent e) -> {
                     if (isAvailable) {
-                        if (localDateTime.isAfter(LocalDateTime.now().toLocalDate().atStartOfDay()) &&
-                            localDateTime.isBefore(LocalDateTime.now().toLocalDate().atStartOfDay().plusHours(24))) {
+                        if (localDateTime.isAfter(LocalDateTime.now().toLocalDate().atStartOfDay())
+                                && localDateTime.isBefore(LocalDateTime.now().toLocalDate().atStartOfDay().plusHours(24))) {
                             BookingRoom bookingRoom = new BookingRoom(context, room.getRoomName());
                             bookingRoom.setVisible(true);
                         } else {
-                            System.out.println("Another booking room");
+                            BookingRoomWithDate bookingRoom = new BookingRoomWithDate();
+                            bookingRoom.setVisible(true);
                         }
                     } else {
                         // Hiển thị hộp thoại với hai lựa chọn: Thanh toán và Hủy

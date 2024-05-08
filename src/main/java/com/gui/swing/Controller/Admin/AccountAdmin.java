@@ -59,7 +59,7 @@ public class AccountAdmin extends javax.swing.JPanel {
     }
 
     private void populateTable(String searchText, String searchType) {
-        String[] columnNames = {"ID", "Room Name", "Active", "Floor", "Type", "Action"};
+        String[] columnNames = {"ID", "Email", "Active", "Role", "Action"};
         List<UserDTO> accountList = getDataAccount(searchText, searchType);
         Object[][] data = new Object[accountList.size()][UserDTO.class.getDeclaredFields().length];
 
