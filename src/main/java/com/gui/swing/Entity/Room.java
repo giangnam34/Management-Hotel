@@ -53,6 +53,7 @@ public class Room {
 
     public void removeRoomInfo(RoomInfo roomInfo) {
         this.roomInfoList.remove(roomInfo);
+
     }
 
 }

@@ -7,6 +7,7 @@ import com.gui.swing.DTO.UserDTO;
 import com.gui.swing.Entity.Enum.EnumTypeRoom;
 import com.gui.swing.Entity.Room;
 import com.gui.swing.Entity.RoomInfo;
+import com.gui.swing.Repository.RoomInfoRepository;
 import com.gui.swing.Repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -24,6 +25,9 @@ public class RoomService {
 
     @Autowired
     private TypeRoomService typeRoomService;
+
+    @Autowired
+    private RoomInfoRepository roomInfoRepository;
 
     public Room findByRoomId(int roomId) {
         if (roomRepository.existsRoomByRoomId(roomId)) {
@@ -77,7 +81,11 @@ public class RoomService {
     }
 
     public void saveRoom(Room room) {
-        roomRepository.save(room);
+        try {
+            roomRepository.save(room);
+        } catch (DataAccessException dataAccessException){
+            System.out.println(dataAccessException.getMessage());
+        }
     }
 
     // add new room
@@ -115,7 +123,13 @@ public class RoomService {
     public GeneralResponse removeRoomInfo(int roomId, RoomInfo roomInfo) {
         try {
             Room room = findByRoomId(roomId);
-            room.removeRoomInfo(roomInfo);
+            for(RoomInfo roomInfo1 : room.getRoomInfoList()){
+                if (roomInfo1.getRoomInfoId() == roomInfo.getRoomInfoId()){
+                    room.removeRoomInfo(roomInfo);
+                    roomInfo1.setRoom(null);
+                    break;
+                }
+            }
             roomRepository.save(room);
         } catch (DataAccessException | IllegalArgumentException exception) {
             return new GeneralResponse(0, exception.getMessage());

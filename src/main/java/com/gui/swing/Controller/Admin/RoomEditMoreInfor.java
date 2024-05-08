@@ -173,10 +173,9 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         try {
             List<RoomInfo> roomInfos = room.getRoomInfoList();
-            
 
             //  Loại bỏ những RoomInfo đã được đánh dấu là cần xóa khỏi roomInfos
-            roomInfos.removeAll(roomInfosToDelete);
+//            roomInfos.removeAll(roomInfosToDelete);
 
             // Duyệt qua tất cả các thành phần trong panelRoomInfor để cập nhật thông tin
             for (Component comp : panelRoomInfor.getComponents()) {
@@ -214,12 +213,11 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
                     }
                 }
             }
-            
-            room.setRoomInfoList(roomInfos);
 
             RoomService roomService = context.getBean(RoomService.class);
-            roomService.saveRoom(room);
-
+            for(RoomInfo roomInfo : roomInfosToDelete){
+                roomService.removeRoomInfo(room.getRoomId(),roomInfo);
+            }
             // Thông báo lưu thành công và đóng form như trước
             JOptionPane.showMessageDialog(this, "Room information saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             Container frame = SwingUtilities.getAncestorOfClass(JFrame.class, this);
