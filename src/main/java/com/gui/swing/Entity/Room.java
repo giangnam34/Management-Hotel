@@ -15,6 +15,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roomId;
 
+    @Column(unique = true)
     private String roomName;
 
     private Boolean roomIsActive;

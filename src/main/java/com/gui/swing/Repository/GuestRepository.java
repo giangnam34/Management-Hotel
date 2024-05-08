@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Integer> {
 
-//    List<Guest> findByLike
+    public Boolean existsGuestByIdentificationCard(String identificationCard);
+
+    public Guest findGuestByIdentificationCard(String identificationCard);
 }

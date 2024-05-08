@@ -26,6 +26,10 @@ public class FloorService {
     @Autowired
     private RoomService roomService;
 
+    public List<Floor> getAllFloor(){
+        return floorRepository.findAll();
+    }
+
     public Floor findFloorByName(String floorName){
         if (floorRepository.existsFloorByFloorName(floorName)){
             return floorRepository.findByFloorName(floorName);

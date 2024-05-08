@@ -4,6 +4,12 @@
  */
 package com.gui.swing.Controller.Rec;
 
+import com.gui.swing.Entity.Floor;
+import com.gui.swing.Entity.Room;
+import com.gui.swing.Service.FloorService;
+import com.gui.swing.Service.RoomService;
+import org.springframework.context.ConfigurableApplicationContext;
+
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -11,6 +17,9 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,12 +38,18 @@ import java.beans.PropertyChangeListener;
  */
 public class ReservationRec extends javax.swing.JPanel {
 
-    private Map<Integer, List<String>> floorData;
+    private ConfigurableApplicationContext context;
+    private Map<String, List<Room>> floorData;
+
 
     /**
      * Creates new form Reservation
      */
-    public ReservationRec() {
+    public ReservationRec(){
+
+    }
+    public ReservationRec(ConfigurableApplicationContext context) {
+        this.context = context;
         initComponents();
         initializeFloorData();
         initTabs();
@@ -45,6 +60,7 @@ public class ReservationRec extends javax.swing.JPanel {
 
         filterDate.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
+                System.out.println("Have change");
                 if ("date".equals(e.getPropertyName())) {
                     if (((Date) e.getNewValue()).before(new Date())) {
                         filterDate.setDate((Date) e.getOldValue());
@@ -54,29 +70,29 @@ public class ReservationRec extends javax.swing.JPanel {
         });  
     }
 
-    private int getNumberOfFloors() {
-        // Thực hiện truy vấn CSDL hoặc bất kỳ logic nào để lấy số tầng
-        return 3; // Chỉ là ví dụ
+    private List<Floor> getAllFloor() {
+        FloorService floorService = context.getBean(FloorService.class);
+        return floorService.getAllFloor();
     }
 
     private void initTabs() {
         jTabbedPane1.removeAll();
-        int numberOfFloors = getNumberOfFloors(); // Số tầng, giả sử là 3
-        for (int i = 1; i <= numberOfFloors; i++) {
+        List<Floor> floorList = getAllFloor();
+        for (int i = 0; i < floorList.size(); i++) {
             JPanel panel = new JPanel(new BorderLayout());
             JTable table = new JTable();
             // Không cần gọi initTableForFloor ở đây nữa
             JScrollPane jScrollPane = new JScrollPane(table);
             panel.add(jScrollPane, BorderLayout.CENTER);
-            jTabbedPane1.addTab("Floor " + i, panel); // Thêm tab cho tầng
+            jTabbedPane1.addTab(floorList.get(i).getFloorName(), panel); // Thêm tab cho tầng
         }
 
         // Đăng ký ChangeListener
         jTabbedPane1.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
+                System.out.println("Have change");
                 JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ReservationRec.this);
-                System.out.println(parentFrame);
 
                 if (parentFrame != null) {
                     // Lấy tham chiếu đến JTable đang hiển thị trên tab hiện tại.
@@ -94,7 +110,7 @@ public class ReservationRec extends javax.swing.JPanel {
         });
 
         // Ngay sau khi các tab được thêm vào, cập nhật dữ liệu cho tab đầu tiên (nếu có)
-        if (numberOfFloors > 0) {
+        if (!floorList.isEmpty()) {
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ReservationRec.this);
             jTabbedPane1.setSelectedIndex(0);
             JPanel selectedPanel = (JPanel) jTabbedPane1.getSelectedComponent();
@@ -108,28 +124,39 @@ public class ReservationRec extends javax.swing.JPanel {
     }
 
     private void initializeFloorData() {
+        FloorService floorService = context.getBean(FloorService.class);
+        List<Floor> floorList = floorService.getAllFloor();
         floorData = new HashMap<>();
-
-        // Thêm dữ liệu mẫu
-        floorData.put(1, List.of("Room 101", "Room 102", "Room 103", "Room 104", "Room 105"));
-        floorData.put(2, List.of("Room 201", "Room 202", "Room 203", "Room 204", "Room 205"));
-        floorData.put(3, List.of("Room 301", "Room 302", "Room 303", "Room 304", "Room 305"));
-
-        // Thêm dữ liệu cho các tầng khác theo cách tương tự
+        for (Floor floor: floorList){
+            floorData.put(floor.getFloorName(), floor.getRoomList().stream().filter(Room::getRoomIsActive).toList());
+        }
     }
 
     private void initTableForFloor(JTable table, int floorNumber) {
-        List<String> roomList = floorData.get(floorNumber);
+        List<Room> roomList = floorData.get("Floor" + floorNumber);
         if (roomList == null) {
             roomList = new ArrayList<>(); // Tránh NullPointerException nếu không có dữ liệu
         }
-        ReservationTableModel tableModel = new ReservationTableModel(floorNumber, roomList);
+        ReservationTableModel tableModel = new ReservationTableModel(LocalDateTime.now(),context, floorNumber, roomList);
+        table.setModel(tableModel);
+        table.setRowHeight(35);
+        table.setDefaultRenderer(JButton.class, new ButtonRenderer());
+    }
+
+    private void initTableForFloor(LocalDateTime localDateTime, JTable table, int floorNumber) {
+        List<Room> roomList = floorData.get("Floor" + floorNumber);
+        if (roomList == null) {
+            roomList = new ArrayList<>(); // Tránh NullPointerException nếu không có dữ liệu
+        }
+        ReservationTableModel tableModel = new ReservationTableModel(localDateTime, context, floorNumber, roomList);
         table.setModel(tableModel);
         table.setRowHeight(35);
         table.setDefaultRenderer(JButton.class, new ButtonRenderer());
     }
 
     private void updateTableData() {
+        initComponents();
+        initializeFloorData();
         // Code để refresh JTable, ví dụ:
         //((AbstractTableModel) jTable1.getModel()).fireTableDataChanged();
     }
@@ -478,9 +505,13 @@ public class ReservationRec extends javax.swing.JPanel {
         String selectedView = (String) filterView.getSelectedItem();
 
         // Lấy giá trị ngày từ date chooser. Bạn cần định dạng ngày lại theo cách bạn muốn hiển thị
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
         String selectedDate = filterDate.getDate() != null ? dateFormat.format(filterDate.getDate()) : "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
 
+        LocalDate localDate = LocalDate.parse(selectedDate,formatter);
+        LocalDateTime dateTime = localDate.atStartOfDay();
+        System.out.println(dateTime);
         // Xử lý hoặc hiển thị các giá trị này theo yêu cầu của bạn
         System.out.println("Search Text: " + searchText);
         System.out.println("Selected Bed: " + selectedBed);
@@ -488,7 +519,38 @@ public class ReservationRec extends javax.swing.JPanel {
         System.out.println("Selected Bathtub: " + selectedBathtub);
         System.out.println("Selected View: " + selectedView);
         System.out.println("Selected Date: " + selectedDate);
+        RoomService roomService = context.getBean(RoomService.class);
+        selectedBed = getValueSearchText(selectedBed);
+        selectedType = getValueSearchText(selectedType);
+        selectedBathtub = getValueSearchText(selectedBathtub);
+        selectedView = getValueSearchText(selectedView);
+        searchText = getValueSearchText(searchText);
+        int index = jTabbedPane1.getSelectedIndex();
+
+        List<Room> resultSearchRoom = roomService.searchRoom("Floor" + (index+1),selectedType,selectedView,selectedBed, selectedBathtub, searchText);
+        floorData.put("Floor" + (index+1) , resultSearchRoom);
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ReservationRec.this);
+        JPanel selectedPanel = (JPanel) jTabbedPane1.getComponentAt(index);
+        JScrollPane scrollPane = (JScrollPane) selectedPanel.getComponent(0);
+        JTable table = (JTable) scrollPane.getViewport().getView();
+
+        // Áp dụng model và editor mới để đảm bảo rằng JFrame sẵn sàng.
+        initTableForFloor(dateTime, table, index + 1); // +1 vì index bắt đầu từ 0
+        table.setDefaultEditor(JButton.class, new ButtonEditor(new JCheckBox(), parentFrame));
+        table.setDefaultRenderer(JButton.class, new ButtonRenderer());
     }//GEN-LAST:event_btnSearchActionPerformed
+
+    private String getValueSearchText(String search){
+        if (search != null){
+            search = search.trim();
+            if (search.equalsIgnoreCase("--- Choose ---"))
+                return "";
+            else
+                return search;
+        } else {
+            return "";
+        }
+    }
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         inputSearch.setText("");
@@ -500,13 +562,26 @@ public class ReservationRec extends javax.swing.JPanel {
         filterView.setSelectedIndex(0);
 
         // Reset JDateChooser về null hoặc đến một ngày cụ thể nếu cần
-        filterDate.setDate(null);
+        filterDate.setDate(new Date());
 
         updateTableData();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
-        updateTableData();
+//        btnReset.doClick();
+        int index = jTabbedPane1.getSelectedIndex();
+        RoomService roomService = context.getBean(RoomService.class);
+        List<Room> resultSearchRoom = roomService.searchRoom("Floor" + (index+1),"","","","","");
+        floorData.put("Floor" + (index+1) , resultSearchRoom);
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ReservationRec.this);
+        JPanel selectedPanel = (JPanel) jTabbedPane1.getComponentAt(index);
+        JScrollPane scrollPane = (JScrollPane) selectedPanel.getComponent(0);
+        JTable table = (JTable) scrollPane.getViewport().getView();
+
+        // Áp dụng model và editor mới để đảm bảo rằng JFrame sẵn sàng.
+        initTableForFloor(table, index + 1); // +1 vì index bắt đầu từ 0
+        table.setDefaultEditor(JButton.class, new ButtonEditor(new JCheckBox(), parentFrame));
+        table.setDefaultRenderer(JButton.class, new ButtonRenderer());
     }//GEN-LAST:event_btnReloadActionPerformed
 
 

@@ -66,6 +66,10 @@ public class Login extends javax.swing.JFrame {
         setPlaceholder(inputEmail, "Enter your email");
         setPlaceholder(inputPassword, "Enter your password");
 
+        // Test function
+        inputEmail.setText("huutrong1101@gmail.com");
+        inputPassword.setText("12345678");
+        // End test
         // Thêm KeyListener cho các trường JTextField
         inputEmail.addKeyListener(new EnterKeyListener());
         inputPassword.addKeyListener(new EnterKeyListener());
@@ -344,7 +348,7 @@ public class Login extends javax.swing.JFrame {
                 AdminDashboard adminDashboard = new AdminDashboard();
                 adminDashboard.setVisible(true);
             } else if (authenticationService.authentication(username, password).getStatus() == 2) {
-                RecDashboard recDashboard = new RecDashboard();
+                RecDashboard recDashboard = new RecDashboard(context);
                 recDashboard.setVisible(true);
             }
             this.dispose();

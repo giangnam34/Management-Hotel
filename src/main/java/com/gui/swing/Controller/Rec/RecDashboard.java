@@ -1,6 +1,8 @@
 package com.gui.swing.Controller.Rec;
 
 import com.gui.swing.Controller.Admin.RoomAdmin;
+import org.springframework.context.ConfigurableApplicationContext;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
@@ -17,9 +19,14 @@ public class RecDashboard extends javax.swing.JFrame {
     /**
      * Creates new form RecDashboard2
      */
+    private ConfigurableApplicationContext context;
     CardLayout cardLayout;
 
-    public RecDashboard() {
+    public RecDashboard(){
+
+    }
+    public RecDashboard(ConfigurableApplicationContext context) {
+        this.context = context;
         initComponents();
         setLocationRelativeTo(null);
         cardLayout = (CardLayout) pnlCards.getLayout();
@@ -1506,7 +1513,7 @@ public class RecDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCustomerActionPerformed
 
     private void btnReservationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservationActionPerformed
-        ReservationRec roomListPanel = new ReservationRec();
+        ReservationRec roomListPanel = new ReservationRec(context);
         pnlCard3.setLayout(new BorderLayout());
         pnlCard3.removeAll();
         pnlCard3.add(roomListPanel, BorderLayout.CENTER);

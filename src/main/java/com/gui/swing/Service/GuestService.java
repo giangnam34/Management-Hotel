@@ -4,6 +4,7 @@ package com.gui.swing.Service;
 import com.gui.swing.Entity.Guest;
 import com.gui.swing.Repository.GuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,26 @@ public class GuestService {
     @Autowired
     private GuestRepository guestRepository;
 
+
+    public Guest findGuestByIdentification(String identification){
+        if (guestRepository.existsGuestByIdentificationCard(identification)){
+            return guestRepository.findGuestByIdentificationCard(identification);
+        }
+        throw new IllegalArgumentException("Khách hàng chưa tồn tại!");
+    }
+
+    public Boolean existGuestByIdentification(String identification){
+        return guestRepository.existsGuestByIdentificationCard(identification);
+    }
+
+    public Boolean addNewGuest(Guest guest){
+        try{
+            guestRepository.save(guest);
+            return true;
+        } catch(DataAccessException dataAccessException){
+            return false;
+        }
+    }
 
     public List<Guest> listAllGuest(){
         return guestRepository.findAll();

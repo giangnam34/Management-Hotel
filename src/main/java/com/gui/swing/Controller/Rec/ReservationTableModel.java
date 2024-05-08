@@ -1,11 +1,17 @@
 package com.gui.swing.Controller.Rec;
 
 import com.gui.swing.Controller.Admin.AdminDashboard;
+import com.gui.swing.Entity.Room;
+import com.gui.swing.Service.InfoRoomService;
+import org.springframework.context.ConfigurableApplicationContext;
+
 import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Vector;
 import java.util.List;
@@ -18,9 +24,15 @@ public class ReservationTableModel extends AbstractTableModel {
     private final Vector<Vector<Object>> data;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private int floorNumber;
-    private List<String> roomList;
+    private List<Room> roomList;
 
-    public ReservationTableModel(int floorNumber, List<String> roomList) {
+    private ConfigurableApplicationContext context;
+
+    private LocalDateTime localDateTime;
+
+    public ReservationTableModel(LocalDateTime localDateTime,ConfigurableApplicationContext context, int floorNumber, List<Room> roomList) {
+        this.localDateTime = localDateTime;
+        this.context = context;
         this.floorNumber = floorNumber;
         this.roomList = roomList;
         columnNames = new Vector<>();
@@ -40,30 +52,53 @@ public class ReservationTableModel extends AbstractTableModel {
             columnNames.add(slot);
         }
 
+        InfoRoomService infoRoomService = context.getBean(InfoRoomService.class);
         // Sử dụng roomList đã được truyền vào để thêm dữ liệu cho mỗi phòng
-        for (String room : roomList) {
+        for (Room room : roomList) {
+            LocalDateTime timeBegin = localDateTime.toLocalDate().atStartOfDay();
+            LocalDateTime timeEnd = timeBegin.plusHours(3);
             Vector<Object> row = new Vector<>();
-            row.add(room); // Tên phòng
+            row.add(room.getRoomName()); // Tên phòng
             for (String timeSlot : timeSlots) {
-                boolean isAvailable = (Math.random() < 0.5); // Lấy ngẫu nhiên true hoặc false
+                boolean isAvailable;
+                if (timeBegin.isBefore(LocalDateTime.now())){
+                    if (timeEnd.isAfter(LocalDateTime.now())) {
+                        isAvailable = !infoRoomService.isRoomRent(room.getRoomId(), LocalDateTime.now(), timeEnd);
+                    } else {
+                        isAvailable = false;
+                    }
+                } else {
+                    isAvailable = !infoRoomService.isRoomRent(room.getRoomId(), timeBegin, timeEnd);
+                }
                 JButton button = new JButton(isAvailable ? "Available" : "Not Available");
                 button.setBackground(isAvailable ? Color.GREEN : Color.RED);
+                LocalDateTime finalTimeBegin = timeBegin;
+                LocalDateTime finalTimeEnd = timeEnd;
                 button.addActionListener((ActionEvent e) -> {
                     if (isAvailable) {
-                        BookingRoom bookingRoom = new BookingRoom(room);
-                        bookingRoom.setVisible(true);
+                        if (localDateTime.isAfter(LocalDateTime.now().toLocalDate().atStartOfDay()) &&
+                            localDateTime.isBefore(LocalDateTime.now().toLocalDate().atStartOfDay().plusHours(24))) {
+                            BookingRoom bookingRoom = new BookingRoom(context, room.getRoomName());
+                            bookingRoom.setVisible(true);
+                        } else {
+                            System.out.println("Another booking room");
+                        }
                     } else {
                         // Hiển thị hộp thoại với hai lựa chọn: Thanh toán và Hủy
-                        int response = JOptionPane.showConfirmDialog(null, "This room has been booked, do you want to pay for the room?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                        if (response == JOptionPane.YES_OPTION) {
-                            PaymentForm paymentForm = new PaymentForm();
-                            paymentForm.setVisible(true);
-                        } else if (response == JOptionPane.NO_OPTION) {
-                           
+                        if (infoRoomService.isRoomRent(room.getRoomId(), finalTimeBegin, finalTimeEnd)) {
+                            int response = JOptionPane.showConfirmDialog(null, "This room has been booked, do you want to pay for the room?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            if (response == JOptionPane.YES_OPTION) {
+                                PaymentForm paymentForm = new PaymentForm();
+                                paymentForm.setVisible(true);
+                            } else if (response == JOptionPane.NO_OPTION) {
+
+                            }
                         }
                     }
                 });
                 row.add(button);
+                timeBegin = timeBegin.plusHours(3);
+                timeEnd = timeEnd.plusHours(3);
             }
             data.add(row);
         }
