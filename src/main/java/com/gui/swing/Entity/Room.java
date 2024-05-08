@@ -35,9 +35,15 @@ public class Room {
         this.roomIsActive = true;
         this.roomInfoList = new ArrayList<>();
     }
+    
     public Room(String roomName){
         new Room();
         this.roomName = roomName;
+    }
+    
+    public Room(String roomName, Boolean roomIsActive) {
+        this.roomName = roomName;
+        this.roomIsActive = roomIsActive;
     }
 
     public void addNewRoomInfo(RoomInfo roomInfo) {

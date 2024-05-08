@@ -26,7 +26,7 @@ public class CustomerAdmin extends javax.swing.JPanel {
     /**
      * Creates new form CustomerAdmin
      */
-    public CustomerAdmin(ConfigurableApplicationContext context) throws IllegalAccessException {
+    public CustomerAdmin(ConfigurableApplicationContext context){
         this.context = context;
         initComponents();
         populateTable("","");
