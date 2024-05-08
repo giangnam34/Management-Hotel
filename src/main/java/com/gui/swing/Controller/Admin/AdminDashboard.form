@@ -128,13 +128,11 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="btnRoom" alignment="0" pref="238" max="32767" attributes="0"/>
-              <Component id="btnIncome" alignment="1" pref="238" max="32767" attributes="0"/>
+              <Component id="btnFloor" alignment="1" pref="238" max="32767" attributes="0"/>
               <Component id="btnReservation" alignment="1" max="32767" attributes="0"/>
               <Component id="btnAccount" alignment="0" max="32767" attributes="0"/>
               <Component id="btnDashboard" alignment="0" pref="238" max="32767" attributes="0"/>
-              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                  <Component id="btnCustomer" alignment="1" pref="214" max="32767" attributes="0"/>
-              </Group>
+              <Component id="btnCustomer" alignment="1" pref="238" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -144,20 +142,15 @@
                   <Component id="btnDashboard" min="-2" pref="45" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="btnRoom" min="-2" pref="45" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="109" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                  <Component id="btnFloor" min="-2" pref="45" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   <Component id="btnReservation" min="-2" pref="45" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                   <Component id="btnAccount" min="-2" pref="45" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                  <Component id="btnIncome" min="-2" pref="45" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="btnCustomer" min="-2" pref="45" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
-              </Group>
-              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="168" max="-2" attributes="0"/>
-                      <Component id="btnCustomer" min="-2" pref="45" max="-2" attributes="0"/>
-                      <EmptySpace pref="492" max="32767" attributes="0"/>
-                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -179,12 +172,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDashboardActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnIncome">
+        <Component class="javax.swing.JButton" name="btnFloor">
           <Properties>
-            <Property name="text" type="java.lang.String" value="INCOME"/>
+            <Property name="text" type="java.lang.String" value="FLOOR"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIncomeActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFloorActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnCustomer">

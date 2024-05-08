@@ -24,7 +24,7 @@ public class Floor {
     private List<Room> roomList;
 
     public Floor(String floorName) {
-        new Floor();
+        this.isActive = true;
         this.floorName = floorName;
     }
 

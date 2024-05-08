@@ -55,7 +55,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnRoom = new javax.swing.JButton();
         btnDashboard = new javax.swing.JButton();
-        btnIncome = new javax.swing.JButton();
+        btnFloor = new javax.swing.JButton();
         btnCustomer = new javax.swing.JButton();
         btnReservation = new javax.swing.JButton();
         btnAccount = new javax.swing.JButton();
@@ -149,10 +149,10 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-        btnIncome.setText("INCOME");
-        btnIncome.addActionListener(new java.awt.event.ActionListener() {
+        btnFloor.setText("FLOOR");
+        btnFloor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIncomeActionPerformed(evt);
+                btnFloorActionPerformed(evt);
             }
         });
 
@@ -182,12 +182,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnRoom, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-            .addComponent(btnIncome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+            .addComponent(btnFloor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
             .addComponent(btnReservation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnAccount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnDashboard, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(btnCustomer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE))
+            .addComponent(btnCustomer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,18 +195,15 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(btnDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(btnRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(109, 109, 109)
+                .addGap(31, 31, 31)
+                .addComponent(btnFloor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
                 .addComponent(btnReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
                 .addComponent(btnAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(btnIncome, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(168, 168, 168)
-                    .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(492, Short.MAX_VALUE)))
         );
 
         pnlCards.setLayout(new java.awt.CardLayout());
@@ -607,15 +603,15 @@ public class AdminDashboard extends javax.swing.JFrame {
         cardLayout.show(pnlCards, "pnlCard1");
     }//GEN-LAST:event_btnDashboardActionPerformed
 
-    private void btnIncomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncomeActionPerformed
-        IncomeAdmin incomePanel = new IncomeAdmin(); // Tạo instance của JPanel chứa thông tin danh sách phòng
+    private void btnFloorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFloorActionPerformed
+        FloorAdmin floorPanel = new FloorAdmin(context); // Tạo instance của JPanel chứa thông tin danh sách phòng
         pnlCard5.setLayout(new BorderLayout()); // Set layout cho pnlCard2
         pnlCard5.removeAll(); // Xóa tất cả các components hiện đang có (nếu có)
-        pnlCard5.add(incomePanel, BorderLayout.CENTER); // Thêm roomListPanel vào pnlCard2
+        pnlCard5.add(floorPanel, BorderLayout.CENTER); // Thêm roomListPanel vào pnlCard2
         pnlCard5.revalidate(); // Refresh và cập nhật lại UI
         pnlCard5.repaint(); // Vẽ lại giao diện pnlCard2
         cardLayout.show(pnlCards, "pnlCard5");
-    }//GEN-LAST:event_btnIncomeActionPerformed
+    }//GEN-LAST:event_btnFloorActionPerformed
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
         CustomerAdmin cusTomerPanel = new CustomerAdmin(context); // Tạo instance của JPanel chứa thông tin danh sách phòng
@@ -686,7 +682,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnAccount;
     private javax.swing.JButton btnCustomer;
     private javax.swing.JButton btnDashboard;
-    private javax.swing.JButton btnIncome;
+    private javax.swing.JButton btnFloor;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnReservation;
     private javax.swing.JButton btnRoom;

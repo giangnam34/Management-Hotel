@@ -41,32 +41,32 @@ public class AddRoom extends javax.swing.JFrame {
         setFieldData();
     }
 
-  public void setFieldData() {
-    txtRoomType.removeAllItems();
-    txtFloor.removeAllItems();
+    public void setFieldData() {
+        txtRoomType.removeAllItems();
+        txtFloor.removeAllItems();
 
-    FloorService floorService = context.getBean(FloorService.class);
-    List<Floor> floors = floorService.getAllFloor();
+        FloorService floorService = context.getBean(FloorService.class);
+        List<Floor> floors = floorService.getAllFloor();
 
-    for (Floor floor : floors) {
-        txtFloor.addItem(floor.getFloorName());
+        for (Floor floor : floors) {
+            txtFloor.addItem(floor.getFloorName());
+        }
+        // Đặt phần tử đầu tiên làm mặc định nếu danh sách không rỗng
+        if (!floors.isEmpty()) {
+            txtFloor.setSelectedIndex(0);
+        }
+
+        TypeRoomService typeRoomService = context.getBean(TypeRoomService.class);
+        List<com.gui.swing.Entity.Type> listType = typeRoomService.getAllType();
+
+        for (com.gui.swing.Entity.Type type : listType) {
+            txtRoomType.addItem(type.getRoomTypeValue().toString());
+        }
+        // Đặt phần tử đầu tiên làm mặc định nếu danh sách không rỗng
+        if (!listType.isEmpty()) {
+            txtRoomType.setSelectedIndex(0);
+        }
     }
-    // Đặt phần tử đầu tiên làm mặc định nếu danh sách không rỗng
-    if (!floors.isEmpty()) {
-        txtFloor.setSelectedIndex(0);
-    }
-
-    TypeRoomService typeRoomService = context.getBean(TypeRoomService.class);
-    List<com.gui.swing.Entity.Type> listType = typeRoomService.getAllType();
-
-      for (com.gui.swing.Entity.Type type : listType) {
-          txtRoomType.addItem(type.getRoomTypeValue().toString());
-      }
-      // Đặt phần tử đầu tiên làm mặc định nếu danh sách không rỗng
-    if (!listType.isEmpty()) {
-        txtRoomType.setSelectedIndex(0);
-    }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -212,6 +212,10 @@ public class AddRoom extends javax.swing.JFrame {
         String roomName = txtRoomName.getText();
         String roomType = (String) txtRoomType.getSelectedItem();
         String floorName = (String) txtFloor.getSelectedItem();
+
+        System.out.println(roomName);
+        System.out.println(roomType);
+        System.out.println(floorName);
 
         // Tạo một danh sách Pair rỗng
         List<Pair> emptyInfoList = new ArrayList<Pair>(); // Giả sử Pair là javafx.util.Pair hoặc tương đương 
