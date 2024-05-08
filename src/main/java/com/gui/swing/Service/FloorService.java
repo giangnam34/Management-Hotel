@@ -32,6 +32,11 @@ public class FloorService {
         }
         throw new IllegalArgumentException("Không tìm thấy tên tầng");
     }
+    
+     public List<Floor> getAllFloor(){  
+            return floorRepository.findAll();
+    }
+     
     public AddNewFloorResponse addNewFloor(String floorName){
         try {
             if (floorRepository.existsFloorByFloorName(floorName))

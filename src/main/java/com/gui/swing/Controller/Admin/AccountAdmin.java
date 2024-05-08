@@ -26,13 +26,13 @@ public class AccountAdmin extends javax.swing.JPanel {
     /**
      * Creates new form AccountAdmin
      */
-
     private ConfigurableApplicationContext context;
     private DefaultTableModel tableModel;
 
-    public AccountAdmin(){
+    public AccountAdmin() {
 
     }
+
     public AccountAdmin(ConfigurableApplicationContext context) {
         this.context = context;
         initComponents();
@@ -44,7 +44,7 @@ public class AccountAdmin extends javax.swing.JPanel {
                 String searchText = inputSearch.getText();
                 String searchType = String.valueOf(typeSearch.getSelectedItem());
                 // Thực hiện tìm kiếm tại đây
-                populateTable(searchText,searchType);
+                populateTable(searchText, searchType);
                 System.out.println("Search Text: " + searchText + ", Search Type: " + searchType);
             }
         });
@@ -53,17 +53,17 @@ public class AccountAdmin extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 inputSearch.setText("");
-                populateTable("","");
+                populateTable("", "");
             }
         });
     }
 
     private void populateTable(String searchText, String searchType) {
-
+        String[] columnNames = {"ID", "Room Name", "Active", "Floor", "Type", "Action"};
         List<UserDTO> accountList = getDataAccount(searchText, searchType);
         Object[][] data = new Object[accountList.size()][UserDTO.class.getDeclaredFields().length];
-        Object[] columnName = Arrays.stream(UserDTO.class.getDeclaredFields()).map(field -> field.getName().toUpperCase()).toArray();
-        for(int i = 0; i < accountList.size(); i++){
+
+        for (int i = 0; i < accountList.size(); i++) {
             data[i][0] = accountList.get(i).getId();
             data[i][1] = accountList.get(i).getUserName();
             data[i][2] = accountList.get(i).getIsActive();
@@ -71,23 +71,24 @@ public class AccountAdmin extends javax.swing.JPanel {
         }
         DefaultTableModel model = new DefaultTableModel(
                 data,
-                columnName
+                columnNames
         );
 
         // Set the model to the table
         tableContent.setModel(model);
 
-
         // Add button renderer and editor
         tableContent.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
         tableContent.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor(new JCheckBox()));
+        tableContent.getColumnModel().getColumn(4).setPreferredWidth(250);
     }
 
-    private List<UserDTO> getDataAccount(String searchText, String searchType){
+    private List<UserDTO> getDataAccount(String searchText, String searchType) {
         UserService userService = context.getBean(UserService.class);
-        if (searchText.isEmpty() && searchType.isEmpty())
+        if (searchText.isEmpty() && searchType.isEmpty()) {
             return userService.listAllUser();
-        return userService.listUserWithFilter(searchText,searchType);
+        }
+        return userService.listUserWithFilter(searchText, searchType);
     }
 
     // Button Renderer
@@ -98,7 +99,6 @@ public class AccountAdmin extends javax.swing.JPanel {
         protected JButton editButton;
 
         protected JButton deleteButton;
-
 
         public ButtonRenderer() {
             moreInfoButton = new JButton("See more");
@@ -170,7 +170,6 @@ public class AccountAdmin extends javax.swing.JPanel {
                 }
             });
 
-
             editButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     // Lấy dữ liệu từ bảng
@@ -223,14 +222,14 @@ public class AccountAdmin extends javax.swing.JPanel {
                             UserService userService = context.getBean(UserService.class);
                             Boolean result = userService.updateStatusUser(userName);
                             // Thông báo đã xóa thành công, lại hiển thị ở giữa màn hình
-                            if (result){
+                            if (result) {
                                 JOptionPane.showMessageDialog(
                                         null, // hiển thị ở giữa màn hình
-                                        (status.equalsIgnoreCase("true") ? "Deactive" : "Active") + " account " + userName +  " successfully.",
+                                        (status.equalsIgnoreCase("true") ? "Deactive" : "Active") + " account " + userName + " successfully.",
                                         "Successful",
                                         JOptionPane.INFORMATION_MESSAGE
                                 );
-                                populateTable("","");
+                                populateTable("", "");
                             } else {
                                 JOptionPane.showMessageDialog(
                                         null, // hiển thị ở giữa màn hình
@@ -284,7 +283,7 @@ public class AccountAdmin extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(1258, 700));
 
-        typeSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "User Name", "Is Active", "Role"}));
+        typeSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "First Name", "Last Name", "Phone", "CCCD", "Email" }));
 
         btnSearch.setBackground(new java.awt.Color(51, 153, 255));
         btnSearch.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
