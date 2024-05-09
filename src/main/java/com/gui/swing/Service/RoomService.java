@@ -5,8 +5,10 @@ import com.gui.swing.DTO.Response.GeneralResponse;
 import com.gui.swing.DTO.Response.Pair;
 import com.gui.swing.DTO.UserDTO;
 import com.gui.swing.Entity.Enum.EnumTypeRoom;
+import com.gui.swing.Entity.Floor;
 import com.gui.swing.Entity.Room;
 import com.gui.swing.Entity.RoomInfo;
+import com.gui.swing.Repository.FloorRepository;
 import com.gui.swing.Repository.RoomInfoRepository;
 import com.gui.swing.Repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,16 @@ public class RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
+    
+    @Autowired
+    private FloorRepository floorRepository;
 
     @Autowired
     private TypeRoomService typeRoomService;
 
     @Autowired
     private RoomInfoRepository roomInfoRepository;
+    
 
     public Long countNumberAllRoom(){
         return roomRepository.count();
@@ -107,6 +113,8 @@ public class RoomService {
             for (Pair info : infoList) {
                 room.addNewRoomInfo(new RoomInfo(info.getKey(), info.getValue()));
             }
+            Floor floor = floorRepository.findByFloorName(floorName);
+            room.setFloor(floor);
             roomRepository.save(room);
         } catch (IllegalArgumentException illegalArgumentException) {
             return new GeneralResponse(0, illegalArgumentException.getMessage());

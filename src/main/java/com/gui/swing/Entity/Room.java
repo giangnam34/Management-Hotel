@@ -37,7 +37,8 @@ public class Room {
     }
     
     public Room(String roomName){
-        new Room();
+       this.roomIsActive = true;
+        this.roomInfoList = new ArrayList<>();
         this.roomName = roomName;
     }
     

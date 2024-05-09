@@ -48,7 +48,16 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
         RoomService roomService = context.getBean(RoomService.class);
         this.room = roomService.findByRoomId(room.getRoomId());
         initComponents();
+        initPanelRoomInforSize();
         populateRoomInfoFields(room.getRoomInfoList());
+    }
+
+    public void initPanelRoomInforSize() {
+        // Đặt kích thước tối thiểu cho panelRoomInfor
+        Dimension minSize = new Dimension(465, 423); // Ví dụ kích thước tối thiểu là 465x423
+        panelRoomInfor.setMinimumSize(minSize);
+        panelRoomInfor.setPreferredSize(minSize);
+        panelRoomInfor.setMaximumSize(minSize);
     }
 
     public void populateRoomInfoFields(List<RoomInfo> roomInfos) {
@@ -56,6 +65,16 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
         panelRoomInfor.removeAll();
 
         int verticalStrutSize = 10;
+
+        if (roomInfos.isEmpty()) {
+            roomInfos.add(new RoomInfo("Diện tích", ""));
+            roomInfos.add(new RoomInfo("Máy lạnh", ""));
+            roomInfos.add(new RoomInfo("Cửa sổ", ""));
+            roomInfos.add(new RoomInfo("Điều hòa", ""));
+            roomInfos.add(new RoomInfo("Bồn tắm", ""));
+            roomInfos.add(new RoomInfo("Thức ăn", ""));
+            roomInfos.add(new RoomInfo("Đồ uống", ""));
+        }
 
         for (RoomInfo info : roomInfos) {
             JPanel panel = new JPanel();
@@ -91,6 +110,7 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
 
         panelRoomInfor.revalidate();
         panelRoomInfor.repaint();
+
     }
 
     private void handleDeleteAction(RoomInfo infoToDelete, ActionEvent e) {
@@ -100,7 +120,8 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
 
             // Tìm JPanel chứa nút bấm và xóa nó khỏi giao diện mà không cập nhật CSDL
             Component component = (Component) e.getSource();
-            JPanel parent = (JPanel) SwingUtilities.getAncestorOfClass(JPanel.class, component);
+            JPanel parent = (JPanel) SwingUtilities.getAncestorOfClass(JPanel.class,
+                    component);
             panelRoomInfor.remove(parent);
 
             panelRoomInfor.revalidate();
@@ -120,7 +141,9 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         panelRoomInfor = new javax.swing.JPanel();
         btnSave = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("ROOM MORE INFOR");
 
         javax.swing.GroupLayout panelRoomInforLayout = new javax.swing.GroupLayout(panelRoomInfor);
@@ -141,6 +164,13 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
             }
         });
 
+        btnAdd.setText("ADD NEW VALUE");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -151,11 +181,13 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
                         .addGap(46, 46, 46)
                         .addComponent(panelRoomInfor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(191, 191, 191)
-                        .addComponent(jLabel1))
+                        .addGap(145, 145, 145)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addComponent(btnAdd))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(188, 188, 188)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(186, 186, 186)
+                        .addComponent(jLabel1)))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -166,8 +198,10 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelRoomInfor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSave)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave)
+                    .addComponent(btnAdd))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -177,7 +211,6 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
 
             //  Loại bỏ những RoomInfo đã được đánh dấu là cần xóa khỏi roomInfos
 //            roomInfos.removeAll(roomInfosToDelete);
-
             // Duyệt qua tất cả các thành phần trong panelRoomInfor để cập nhật thông tin
             for (Component comp : panelRoomInfor.getComponents()) {
                 if (comp instanceof JPanel) {
@@ -210,18 +243,21 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
                         // Nếu info không tồn tại trong danh sách (có thể đã bị xóa), tạo mới và thêm vào
                         if (!infoExists && !roomInfosToDelete.stream().anyMatch(info -> info.getKeyRoomInfo().equals(keyRoomInfo))) {
                             roomInfos.add(new RoomInfo(keyRoomInfo, valueRoomInfo));
+
                         }
                     }
                 }
             }
 
-            RoomService roomService = context.getBean(RoomService.class);
-            for(RoomInfo roomInfo : roomInfosToDelete){
-                roomService.removeRoomInfo(room.getRoomId(),roomInfo);
+            RoomService roomService = context.getBean(RoomService.class
+            );
+            for (RoomInfo roomInfo : roomInfosToDelete) {
+                roomService.removeRoomInfo(room.getRoomId(), roomInfo);
             }
             // Thông báo lưu thành công và đóng form như trước
             JOptionPane.showMessageDialog(this, "Room information saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-            Container frame = SwingUtilities.getAncestorOfClass(JFrame.class, this);
+            Container frame = SwingUtilities.getAncestorOfClass(JFrame.class,
+                    this);
             if (frame != null && frame instanceof JFrame) {
                 ((JFrame) frame).dispose();
             }
@@ -230,8 +266,22 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        NewRoomInfoDialog addDialog = new NewRoomInfoDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        addDialog.setLocationRelativeTo(this);
+        addDialog.setVisible(true);
+
+        // Sau khi dialog được đóng, tiến hành cập nhật RoomInfo
+        RoomInfo newInfo = addDialog.getRoomInfo(); // Lấy thông tin mới từ addDialog
+        if (newInfo.getKeyRoomInfo() != null && !newInfo.getKeyRoomInfo().isEmpty()) {
+            room.getRoomInfoList().add(newInfo); // Thêm vào danh sách
+            populateRoomInfoFields(room.getRoomInfoList()); // Cập nhật UI
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel panelRoomInfor;
