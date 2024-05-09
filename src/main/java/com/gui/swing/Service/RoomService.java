@@ -24,7 +24,7 @@ public class RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
-    
+
     @Autowired
     private FloorRepository floorRepository;
 
@@ -33,15 +33,15 @@ public class RoomService {
 
     @Autowired
     private RoomInfoRepository roomInfoRepository;
-    
 
-    public Long countNumberAllRoom(){
+    public Long countNumberAllRoom() {
         return roomRepository.count();
     }
 
-    public Long countNumberAllRoomIsActive(){
+    public Long countNumberAllRoomIsActive() {
         return roomRepository.countRoomByRoomIsActive(true);
     }
+
     public Room findByRoomId(int roomId) {
         if (roomRepository.existsRoomByRoomId(roomId)) {
             return roomRepository.findByRoomId(roomId);
@@ -55,6 +55,7 @@ public class RoomService {
         }
         throw new IllegalArgumentException("Không tìm thấy phòng");
     }
+
     public List<Room> findByFloor(String floorName) {
         return roomRepository.findAllByFloorFloorName(floorName);
     }
@@ -85,6 +86,46 @@ public class RoomService {
 
         return roomList;
     }
+    
+    public List<Room> getRoomsInDashboard(String floorName, String typeOfRoom, String view, String bed, String bathTub, String searchText) {
+        List<Room> roomList = "--- Choose ---".equals(floorName) ? roomRepository.findAllByFloorFloorName("Floor1") : roomRepository.findAllByFloorFloorName(floorName);
+
+        // Lọc theo loại phòng, bỏ qua nếu giá trị là "--- Choose ---"
+        if (!StringUtils.isEmpty(typeOfRoom) && !"--- Choose ---".equals(typeOfRoom)) {
+            roomList = roomList.stream()
+                    .filter(room -> typeOfRoom.equalsIgnoreCase(room.getType().getRoomTypeValue().toString()))
+                    .collect(Collectors.toList());
+        }
+        
+        if (view != null && !view.isEmpty()) {
+            if (view.equalsIgnoreCase("YES")) {
+                roomList = roomList.stream().filter(room -> !room.getRoomInfoList().stream().filter(roomInfo -> roomInfo.getKeyRoomInfo().equalsIgnoreCase("Cửa sổ")).toList().isEmpty()).toList();
+            } else {
+                roomList = roomList.stream().filter(room -> room.getRoomInfoList().stream().filter(roomInfo -> roomInfo.getKeyRoomInfo().equalsIgnoreCase("Cửa sổ")).toList().isEmpty()).toList();
+            }
+        }
+        if (bed != null && !bed.isEmpty()) {
+            roomList = roomList.stream().filter(room -> !room.getRoomInfoList().stream().filter(roomInfo -> roomInfo.getKeyRoomInfo().equalsIgnoreCase("Giường") && roomInfo.getValueRoomInfo().equalsIgnoreCase(bed)).toList().isEmpty()).toList();
+        }
+        
+        if (bathTub != null && !bathTub.isEmpty()) {
+            if (bathTub.equalsIgnoreCase("YES")) {
+                roomList = roomList.stream().filter(room -> !room.getRoomInfoList().stream().filter(roomInfo -> roomInfo.getKeyRoomInfo().equalsIgnoreCase("Bồn tắm")).toList().isEmpty()).toList();
+            } else {
+                roomList = roomList.stream().filter(room -> room.getRoomInfoList().stream().filter(roomInfo -> roomInfo.getKeyRoomInfo().equalsIgnoreCase("Bồn tắm")).toList().isEmpty()).toList();
+            }
+        }
+
+        if (!StringUtils.isEmpty(searchText)) {
+            String searchTextUpper = searchText.toUpperCase();
+            roomList = roomList.stream()
+                    .filter(room -> room.getRoomName().toUpperCase().contains(searchTextUpper))
+                    .collect(Collectors.toList());
+        }
+
+        return roomList;
+    }
+
 
     public Room findByRoomNameAndFloor(String roomName, String floorName) {
         if (roomRepository.existsRoomByRoomNameAndFloor_FloorName(roomName, floorName)) {
@@ -96,16 +137,15 @@ public class RoomService {
     public void saveRoom(Room room) {
         try {
             roomRepository.save(room);
-        } catch (DataAccessException dataAccessException){
+        } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
         }
     }
 
     // add new room
-
     public GeneralResponse addNewRoom(String roomName, EnumTypeRoom typeRoom, List<Pair> infoList, String floorName) {
         try {
-            if (roomRepository.existsRoomByRoomNameAndFloor_FloorName(roomName, floorName)){
+            if (roomRepository.existsRoomByRoomNameAndFloor_FloorName(roomName, floorName)) {
                 return new GeneralResponse(0, "Phòng đã tồn tại!");
             }
             Room room = new Room(roomName);
@@ -138,8 +178,8 @@ public class RoomService {
     public GeneralResponse removeRoomInfo(int roomId, RoomInfo roomInfo) {
         try {
             Room room = findByRoomId(roomId);
-            for(RoomInfo roomInfo1 : room.getRoomInfoList()){
-                if (roomInfo1.getRoomInfoId() == roomInfo.getRoomInfoId()){
+            for (RoomInfo roomInfo1 : room.getRoomInfoList()) {
+                if (roomInfo1.getRoomInfoId() == roomInfo.getRoomInfoId()) {
                     room.removeRoomInfo(roomInfo);
                     roomInfo1.setRoom(null);
                     roomInfoRepository.save(roomInfo1);
@@ -176,7 +216,10 @@ public class RoomService {
     }
 
     public List<Room> searchRoom(String floorName, String typeOfRoom, String view, String bed, String bathTub, String searchText) {
+       
+
         List<Room> roomList = roomRepository.findAllByFloorFloorName(floorName);
+
         if (typeOfRoom != null && !typeOfRoom.isEmpty()) {
             roomList = roomList.stream().filter(room -> room.getType().getRoomTypeValue().toString().equalsIgnoreCase(typeOfRoom)).toList();
         }

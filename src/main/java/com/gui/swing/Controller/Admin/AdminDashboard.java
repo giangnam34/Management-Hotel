@@ -1,6 +1,7 @@
 package com.gui.swing.Controller.Admin;
 
 import com.gui.swing.Controller.Login;
+import com.gui.swing.Controller.Rec.RecDashboard;
 import com.gui.swing.Service.AdminService;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,15 @@ public class AdminDashboard extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         cardLayout = (CardLayout) pnlCards.getLayout();
+
+        AdminService adminService = context.getBean(AdminService.class);
+        Long totalOcc = adminService.getTotalOccupancy();
+        Long realOcc = adminService.getRealOccupancy();
+        Long ocuppiedOcc = adminService.getOccupied();
+
+        totalOccupancy.setText(totalOcc.toString());
+        realOccupancy.setText(realOcc.toString());
+        occupied.setText(ocuppiedOcc.toString());
     }
 
     /**
@@ -48,15 +58,15 @@ public class AdminDashboard extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        AdminService adminService = context.getBean(AdminService.class);
+
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
+        btnLogout1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btnRoom = new javax.swing.JButton();
         btnDashboard = new javax.swing.JButton();
-//        btnIncome = new javax.swing.JButton();
         btnFloor = new javax.swing.JButton();
         btnCustomer = new javax.swing.JButton();
         btnReservation = new javax.swing.JButton();
@@ -78,13 +88,13 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
+        totalOccupancy = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
+        occupied = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
+        realOccupancy = new javax.swing.JLabel();
         pnlCard2 = new javax.swing.JPanel();
         pnlCard3 = new javax.swing.JPanel();
         pnlCard4 = new javax.swing.JPanel();
@@ -111,6 +121,13 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
+        btnLogout1.setText("RECEPTION");
+        btnLogout1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogout1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -120,7 +137,9 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addGap(377, 377, 377)
+                .addGap(182, 182, 182)
+                .addComponent(btnLogout1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
         );
@@ -131,7 +150,8 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogout1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -151,12 +171,6 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-//        btnIncome.setText("INCOME");
-//        btnIncome.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                btnIncomeActionPerformed(evt);
-//            }
-//        });
         btnFloor.setText("FLOOR");
         btnFloor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -190,7 +204,6 @@ public class AdminDashboard extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnRoom, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-//            .addComponent(btnIncome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
             .addComponent(btnFloor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
             .addComponent(btnReservation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnAccount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -210,8 +223,6 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(btnReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
                 .addComponent(btnAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-//                .addComponent(btnIncome, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -355,8 +366,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel18.setText("Total");
 
-        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel19.setText(String.valueOf(adminService.getTotalOccupancy()));
+        totalOccupancy.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        totalOccupancy.setText("400");
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -369,7 +380,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addComponent(jLabel18))
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addGap(101, 101, 101)
-                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(totalOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(113, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
@@ -378,15 +389,15 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel19)
+                .addComponent(totalOccupancy)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel20.setText("Vacant");
 
-        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel21.setText(String.valueOf(adminService.getRealOccupancy()));
+        occupied.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        occupied.setText("200");
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -399,7 +410,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addComponent(jLabel20))
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addGap(101, 101, 101)
-                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(occupied, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(113, Short.MAX_VALUE))
         );
         jPanel13Layout.setVerticalGroup(
@@ -408,15 +419,15 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel21)
+                .addComponent(occupied)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
         jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel22.setText("Occupied");
 
-        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel23.setText(String.valueOf(adminService.getOccupied()));
+        realOccupancy.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        realOccupancy.setText("200");
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
@@ -429,7 +440,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addComponent(jLabel22))
                     .addGroup(jPanel14Layout.createSequentialGroup()
                         .addGap(101, 101, 101)
-                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(realOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(113, Short.MAX_VALUE))
         );
         jPanel14Layout.setVerticalGroup(
@@ -438,7 +449,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel23)
+                .addComponent(realOccupancy)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -498,7 +509,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGroup(pnlCard1Layout.createSequentialGroup()
                     .addGap(73, 73, 73)
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(427, Short.MAX_VALUE)))
+                    .addContainerGap(433, Short.MAX_VALUE)))
         );
 
         pnlCards.add(pnlCard1, "pnlCard1");
@@ -513,7 +524,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         );
         pnlCard2Layout.setVerticalGroup(
             pnlCard2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 699, Short.MAX_VALUE)
+            .addGap(0, 705, Short.MAX_VALUE)
         );
 
         pnlCards.add(pnlCard2, "pnlCard2");
@@ -526,7 +537,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         );
         pnlCard3Layout.setVerticalGroup(
             pnlCard3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 699, Short.MAX_VALUE)
+            .addGap(0, 705, Short.MAX_VALUE)
         );
 
         pnlCards.add(pnlCard3, "pnlCard3");
@@ -539,7 +550,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         );
         pnlCard4Layout.setVerticalGroup(
             pnlCard4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 699, Short.MAX_VALUE)
+            .addGap(0, 705, Short.MAX_VALUE)
         );
 
         pnlCards.add(pnlCard4, "pnlCard4");
@@ -552,7 +563,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         );
         pnlCard5Layout.setVerticalGroup(
             pnlCard5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 699, Short.MAX_VALUE)
+            .addGap(0, 705, Short.MAX_VALUE)
         );
 
         pnlCards.add(pnlCard5, "pnlCard5");
@@ -654,6 +665,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         cardLayout.show(pnlCards, "pnlCard5");
     }//GEN-LAST:event_btnAccountActionPerformed
 
+    private void btnLogout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogout1ActionPerformed
+        RecDashboard recDashboard = new RecDashboard(context);
+        recDashboard.setVisible(true);
+    }//GEN-LAST:event_btnLogout1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -693,9 +709,9 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnAccount;
     private javax.swing.JButton btnCustomer;
     private javax.swing.JButton btnDashboard;
-//    private javax.swing.JButton btnIncome;
     private javax.swing.JButton btnFloor;
     private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnLogout1;
     private javax.swing.JButton btnReservation;
     private javax.swing.JButton btnRoom;
     private javax.swing.JLabel jLabel1;
@@ -708,12 +724,9 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -724,6 +737,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JLabel occupied;
     private javax.swing.JPanel pnlCard1;
     private javax.swing.JPanel pnlCard2;
     private javax.swing.JPanel pnlCard3;
@@ -731,5 +745,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel pnlCard5;
     private javax.swing.JPanel pnlCard6;
     private javax.swing.JPanel pnlCards;
+    private javax.swing.JLabel realOccupancy;
+    private javax.swing.JLabel totalOccupancy;
     // End of variables declaration//GEN-END:variables
 }

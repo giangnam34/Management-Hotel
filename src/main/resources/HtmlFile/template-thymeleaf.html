@@ -1,56 +1,68 @@
 <!DOCTYPE html>
 <html >
-<head>
-  <meta charset="UTF-8">
-  <title> Thư tuyển dụng </title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title> Thư tuyển dụng </title>
+    </head>
 
-<body>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <!--[if !mso]><!-->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <!--<![endif]-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
-  <!--[if !mso]><!-->
-  <style type="text/css">
-    @font-face {
-      font-family: 'flama-condensed';
-      font-weight: 100;
-      src: url('http://assets.vervewine.com/fonts/FlamaCond-Medium.eot');
-      src: url('http://assets.vervewine.com/fonts/FlamaCond-Medium.eot?#iefix') format('embedded-opentype'),
-      url('http://assets.vervewine.com/fonts/FlamaCond-Medium.woff') format('woff'),
-      url('http://assets.vervewine.com/fonts/FlamaCond-Medium.ttf') format('truetype');
-    }
-    @font-face {
-      font-family: 'Muli';
-      font-weight: 100;
-      src: url('http://assets.vervewine.com/fonts/muli-regular.eot');
-      src: url('http://assets.vervewine.com/fonts/muli-regular.eot?#iefix') format('embedded-opentype'),
-      url('http://assets.vervewine.com/fonts/muli-regular.woff2') format('woff2'),
-      url('http://assets.vervewine.com/fonts/muli-regular.woff') format('woff'),
-      url('http://assets.vervewine.com/fonts/muli-regular.ttf') format('truetype');
-    }
-    .address-description a {color: #000000 ; text-decoration: none;}
-    @media (max-device-width: 480px) {
-      .vervelogoplaceholder {
-        height:83px ;
-      }
-    }
-  </style>
-  <!--<![endif]-->
-  <!--[if (gte mso 9)|(IE)]>
-  <style type="text/css">
-    .address-description a {color: #000000 ; text-decoration: none;}
-    table {border-collapse: collapse ;}
-  </style>
-  <![endif]-->
-</head>
+    <body>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <!--[if !mso]><!-->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--<![endif]-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title></title>
+        <!--[if !mso]><!-->
+        <style type="text/css">
+            @font-face {
+                font-family: 'flama-condensed';
+                font-weight: 100;
+                src: url('http://assets.vervewine.com/fonts/FlamaCond-Medium.eot');
+                src: url('http://assets.vervewine.com/fonts/FlamaCond-Medium.eot?#iefix') format('embedded-opentype'),
+                    url('http://assets.vervewine.com/fonts/FlamaCond-Medium.woff') format('woff'),
+                    url('http://assets.vervewine.com/fonts/FlamaCond-Medium.ttf') format('truetype');
+            }
+            @font-face {
+                font-family: 'Muli';
+                font-weight: 100;
+                src: url('http://assets.vervewine.com/fonts/muli-regular.eot');
+                src: url('http://assets.vervewine.com/fonts/muli-regular.eot?#iefix') format('embedded-opentype'),
+                    url('http://assets.vervewine.com/fonts/muli-regular.woff2') format('woff2'),
+                    url('http://assets.vervewine.com/fonts/muli-regular.woff') format('woff'),
+                    url('http://assets.vervewine.com/fonts/muli-regular.ttf') format('truetype');
+            }
+            .address-description a {
+                color: #000000 ;
+                text-decoration: none;
+            }
+            @media (max-device-width: 480px) {
+                .vervelogoplaceholder {
+                    height:83px ;
+                }
+            }
+        </style>
+        <!--<![endif]-->
+        <!--[if (gte mso 9)|(IE)]>
+        <style type="text/css">
+          .address-description a {color: #000000 ; text-decoration: none;}
+          table {border-collapse: collapse ;}
+        </style>
+        <![endif]-->
+    </head>
 
-  <body>
-        <!-- Các phần khác của thư điện tử của bạn đến đây... -->
-        <p>Your confirmation code is: <strong th:text="${ConfirmationCode}"></strong></p>
-        <!-- Tiếp tục phần còn lại của email... -->
+    <body>
+        <div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+            <div style="margin:50px auto;width:70%;padding:20px 0">
+                <div style="border-bottom:1px solid #eee">
+                    <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">NT Hotel</a>
+                </div>
+                <p style="font-size:1.1em">Hi,</p>
+                <p>Use the following OTP to complete your Forget Password procedures.</p>
+                <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;"> <strong th:text="${ConfirmationCode}"></strong></h2>
+                <p style="font-size:0.9em;">Regards,<br />NT Hotel</p>
+                <hr style="border:none;border-top:1px solid #eee" />
+            </div>
+        </div>
     </body>
 </html>

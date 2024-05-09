@@ -502,7 +502,7 @@ public class ReservationRec extends javax.swing.JPanel {
         String selectedBed = (String) filterBed.getSelectedItem();
         String selectedType = (String) filterType.getSelectedItem();
         String selectedBathtub = (String) filterBathtub.getSelectedItem();
-        String selectedView = (String) filterView.getSelectedItem();
+        String selectedView = (String) filterView.getSelectedItem(); 
 
         // Lấy giá trị ngày từ date chooser. Bạn cần định dạng ngày lại theo cách bạn muốn hiển thị
         SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");

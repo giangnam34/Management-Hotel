@@ -23,7 +23,8 @@ public class BookingRoom extends javax.swing.JFrame {
      * Creates new form BookingRoom
      */
     private ConfigurableApplicationContext context;
-    public BookingRoom(LocalDateTime timeBegin, LocalDateTime timeEnd,ConfigurableApplicationContext context,String roomName) {
+
+    public BookingRoom(LocalDateTime timeBegin, LocalDateTime timeEnd, ConfigurableApplicationContext context, String roomName) {
         this.context = context;
         initComponents();
         setLocationRelativeTo(null);
@@ -36,6 +37,7 @@ public class BookingRoom extends javax.swing.JFrame {
         ButtonGroup bookingTypeGroup = new ButtonGroup();
         bookingTypeGroup.add(radioHour);
         bookingTypeGroup.add(radioDay);
+        radioHour.setSelected(true);
 
         txtFirstName.setText("Vo");
         txtLastName.setText("Giang Nam");

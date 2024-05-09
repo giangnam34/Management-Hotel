@@ -39,6 +39,14 @@ public class FloorService {
         throw new IllegalArgumentException("Không tìm thấy tên tầng");
     }
 
+    public void saveFloor(Floor floor) {
+        try {
+            floorRepository.save(floor);
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+        }
+    }
+
     public List<Floor> getFloorsByFilters(String searchText, String status) {
         List<Floor> floorList = floorRepository.findAll();
 

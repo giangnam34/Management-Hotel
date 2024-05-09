@@ -4,17 +4,39 @@
  */
 package com.gui.swing.Controller.Admin;
 
+import com.gui.swing.Entity.Floor;
+import com.gui.swing.Entity.Room;
+import com.gui.swing.Service.FloorService;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import org.springframework.context.ConfigurableApplicationContext;
+
 /**
  *
  * @author Acer
  */
 public class EditFloorInfo extends javax.swing.JFrame {
 
+    private ConfigurableApplicationContext context;
+    private Floor floor;
+
     /**
      * Creates new form EditFloorInfo
      */
     public EditFloorInfo() {
+    }
+
+    public EditFloorInfo(ConfigurableApplicationContext context, Floor floor) {
+        this.context = context;
+        this.floor = floor;
         initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null); // Đặt form ở giữa màn hình
+        setFieldData(floor);
+    }
+
+    public void setFieldData(Floor floor) {
+        txtFloorName.setText(floor.getFloorName());
     }
 
     /**
@@ -30,13 +52,14 @@ public class EditFloorInfo extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         txtFloorName = new javax.swing.JTextField();
+        btnSave1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("EDIT FLOOR INFO");
 
-        jLabel7.setText("Room Floor:");
+        jLabel7.setText("Floor Name:");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -56,19 +79,32 @@ public class EditFloorInfo extends javax.swing.JFrame {
                 .addComponent(jLabel7))
         );
 
+        btnSave1.setBackground(new java.awt.Color(51, 153, 255));
+        btnSave1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnSave1.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave1.setText("SAVE");
+        btnSave1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSave1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(102, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(213, 213, 213))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(85, 85, 85))))
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(85, 85, 85))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(198, 198, 198)
+                .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(207, 207, 207)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -77,11 +113,30 @@ public class EditFloorInfo extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(295, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
+        try {
+            String floorName = txtFloorName.getText();
+            floor.setFloorName(floorName);
+
+            FloorService floorService = context.getBean(FloorService.class);
+            floorService.saveFloor(floor);
+
+            JOptionPane.showMessageDialog(this, "Floor information saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        } catch (Exception e) {
+            // Trong trường hợp có lỗi khi lưu, hiển thị thông báo lỗi
+            JOptionPane.showMessageDialog(this, "Failed to save room information. " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnSave1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -119,6 +174,7 @@ public class EditFloorInfo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSave1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel6;
