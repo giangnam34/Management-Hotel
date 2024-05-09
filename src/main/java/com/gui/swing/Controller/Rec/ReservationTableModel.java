@@ -94,7 +94,7 @@ public class ReservationTableModel extends AbstractTableModel {
                                 BookingRoomService bookingRoomService = context.getBean(BookingRoomService.class);
                                 CheckoutRoomResponse checkoutRoomResponse = bookingRoomService.checkOut(room.getRoomName());
                                 System.out.println(checkoutRoomResponse);
-                                PaymentForm paymentForm = new PaymentForm();
+                               PaymentForm paymentForm = new PaymentForm(checkoutRoomResponse);
                                 paymentForm.setVisible(true);
                             } else if (response == JOptionPane.NO_OPTION) {
 

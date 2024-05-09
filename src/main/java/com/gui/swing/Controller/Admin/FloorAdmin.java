@@ -181,7 +181,23 @@ public class FloorAdmin extends javax.swing.JPanel {
             });
 
             editButton.addActionListener(e -> {
-                // Xử lý sự kiện khi nhấn vào nút "Edit"
+                int selectedRow = tableContent.getSelectedRow();
+                if (selectedRow >= 0) {
+                    String floorName = tableContent.getModel().getValueAt(selectedRow, 1).toString();
+                    FloorService floorService = context.getBean(FloorService.class);
+                    Floor floor = floorService.findFloorByName(floorName);
+
+                    EditFloorInfo editFloorInfo = new EditFloorInfo(context, floor);
+                    editFloorInfo.addWindowListener(new WindowAdapter() {
+                        public void windowClosed(WindowEvent e) {
+                            editFloorInfo.dispose();
+                            // Thực hiện các hành động sau khi cửa sổ đã đóng
+                            btnReset.doClick();
+                        }
+                    });
+//                        editRoomInfo.setFieldData(room);
+                    editFloorInfo.setVisible(true);
+                }
             });
 
             changeStatusButton.addActionListener(e -> {
@@ -353,7 +369,15 @@ public class FloorAdmin extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        
+        AddNewFloor addFloor = new AddNewFloor(context);
+        addFloor.addWindowListener(new WindowAdapter() {
+            public void windowClosed(WindowEvent e) {
+                addFloor.dispose();
+
+                btnReset.doClick();
+            }
+        });
+        addFloor.setVisible(true);
     }//GEN-LAST:event_btnCreateActionPerformed
 
 
