@@ -38,20 +38,29 @@ public class UserService {
         List<UserDTO> result = new ArrayList<>();
         List<User> userList = userRepository.findAll();
         for (User user: userRepository.findAll().stream().filter(user -> !user.getRole().getRoleName().equalsIgnoreCase("Admin")).toList()) {
-            UserDTO userDTO = new UserDTO(user.getUserId(),user.getUserName(),user.getUserIsActive(),user.getRole().getRoleName());
+            UserDTO userDTO = new UserDTO(user.getUserId(),user.getUserName(),user.getUserIsActive(),user.getRole().getRoleName(), user.getFullName(), user.getIdentificationCard());
             result.add(userDTO);
         }
         return result;
     }
 
     public List<UserDTO> listUserWithFilter(String searchText, String searchType) {
+        // FirstName, LastName, CCCD,
         List<UserDTO> result = listAllUser();
         if (searchType.equalsIgnoreCase("User Name")){
             result = result.stream().filter(user -> user.getUserName().toUpperCase().contains(searchText.toUpperCase())).toList();
-        } if (searchType.equalsIgnoreCase("Is Active")){
-            result = result.stream().filter(guest -> guest.getIsActive().toString().toUpperCase().contains(searchText.toUpperCase())).toList();
-        }if (searchType.equalsIgnoreCase("Role")){
-            result = result.stream().filter(guest -> guest.getRole().toUpperCase().contains(searchText.toUpperCase())).toList();
+        }
+        if (searchType.equalsIgnoreCase("Is Active")){
+            result = result.stream().filter(user -> user.getIsActive().toString().toUpperCase().contains(searchText.toUpperCase())).toList();
+        }
+        if (searchType.equalsIgnoreCase("Role")){
+            result = result.stream().filter(user -> user.getRole().toUpperCase().contains(searchText.toUpperCase())).toList();
+        }
+        if (searchType.equalsIgnoreCase("Full Name")){
+            result = result.stream().filter(user -> user.getFullName().toUpperCase().contains(searchText.toUpperCase())).toList();
+        }
+        if (searchType.equalsIgnoreCase("CCCD")){
+            result = result.stream().filter(user -> user.getIdentificationCard().toUpperCase().contains(searchText.toUpperCase())).toList();
         }
         return result;
     }

@@ -89,7 +89,7 @@ public class MoreInfoAccount extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("MORE INFO");
 
-        jLabel2.setText("First Name:");
+        jLabel2.setText("Full Name:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -108,7 +108,7 @@ public class MoreInfoAccount extends javax.swing.JFrame {
                 .addComponent(jLabel2))
         );
 
-        jLabel3.setText("Last Name:");
+        jLabel3.setText("Phone:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

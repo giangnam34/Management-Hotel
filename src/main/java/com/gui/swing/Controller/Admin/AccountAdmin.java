@@ -283,7 +283,7 @@ public class AccountAdmin extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(1258, 700));
 
-        typeSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "First Name", "Last Name", "Phone", "CCCD", "Email" }));
+        typeSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Full Name", "Role", "CCCD", "User Name", "Is Active" }));
 
         btnSearch.setBackground(new java.awt.Color(51, 153, 255));
         btnSearch.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
