@@ -19,6 +19,7 @@ public class PaymentForm extends javax.swing.JFrame {
         initComponents();
          setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }
 
     /**

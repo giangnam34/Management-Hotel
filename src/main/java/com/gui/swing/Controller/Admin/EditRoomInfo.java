@@ -12,6 +12,8 @@ import com.gui.swing.Service.FloorService;
 import com.gui.swing.Service.RoomService;
 import com.gui.swing.Service.TypeRoomService;
 import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -268,7 +270,6 @@ public class EditRoomInfo extends javax.swing.JFrame {
 
     private void btnMoreInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoreInfoActionPerformed
         RoomEditMoreInfor detailsForm = new RoomEditMoreInfor(room, context);
-
         // Tạo JFrame hoặc JDialog mới để chứa detailsForm.
         JFrame frame = new JFrame("Room More Information");
         frame.setContentPane(detailsForm);

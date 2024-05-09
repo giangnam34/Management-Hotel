@@ -44,8 +44,9 @@ public class RoomEditMoreInfor extends javax.swing.JPanel {
     }
 
     public RoomEditMoreInfor(Room room, ConfigurableApplicationContext context) {
-        this.room = room;
         this.context = context;
+        RoomService roomService = context.getBean(RoomService.class);
+        this.room = roomService.findByRoomId(room.getRoomId());
         initComponents();
         initPanelRoomInforSize();
         populateRoomInfoFields(room.getRoomInfoList());

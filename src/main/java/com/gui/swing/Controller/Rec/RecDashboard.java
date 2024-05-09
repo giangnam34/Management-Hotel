@@ -881,7 +881,7 @@ public class RecDashboard extends javax.swing.JFrame {
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         this.dispose(); // Đóng JFrame hiện tại
-        Login loginForm = new Login(); // Tạo một instance mới của Login form
+        Login loginForm = new Login(context); // Tạo một instance mới của Login form
         loginForm.setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 

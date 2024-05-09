@@ -1,7 +1,9 @@
 package com.gui.swing.Controller.Rec;
 
 import com.gui.swing.Controller.Admin.AdminDashboard;
+import com.gui.swing.DTO.Response.CheckoutRoomResponse;
 import com.gui.swing.Entity.Room;
+import com.gui.swing.Service.BookingRoomService;
 import com.gui.swing.Service.InfoRoomService;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -78,17 +80,20 @@ public class ReservationTableModel extends AbstractTableModel {
                     if (isAvailable) {
                         if (localDateTime.isAfter(LocalDateTime.now().toLocalDate().atStartOfDay())
                                 && localDateTime.isBefore(LocalDateTime.now().toLocalDate().atStartOfDay().plusHours(24))) {
-                            BookingRoom bookingRoom = new BookingRoom(context, room.getRoomName());
-                            bookingRoom.setVisible(true);
+                                BookingRoom bookingRoom = new BookingRoom(LocalDateTime.now(), LocalDateTime.now().plusYears(100), context, room.getRoomName());
+                                bookingRoom.setVisible(true);
                         } else {
-                            BookingRoomWithDate bookingRoom = new BookingRoomWithDate();
+                            BookingRoomWithDate bookingRoom = new BookingRoomWithDate(context,localDateTime,room.getRoomName());
                             bookingRoom.setVisible(true);
                         }
                     } else {
                         // Hiển thị hộp thoại với hai lựa chọn: Thanh toán và Hủy
-                        if (infoRoomService.isRoomRent(room.getRoomId(), finalTimeBegin, finalTimeEnd)) {
+                        if (infoRoomService.isRoomRent(room.getRoomId(), finalTimeBegin, finalTimeEnd) && finalTimeBegin.toLocalDate().atStartOfDay().isBefore(LocalDateTime.now())) {
                             int response = JOptionPane.showConfirmDialog(null, "This room has been booked, do you want to pay for the room?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (response == JOptionPane.YES_OPTION) {
+                                BookingRoomService bookingRoomService = context.getBean(BookingRoomService.class);
+                                CheckoutRoomResponse checkoutRoomResponse = bookingRoomService.checkOut(room.getRoomName());
+                                System.out.println(checkoutRoomResponse);
                                 PaymentForm paymentForm = new PaymentForm();
                                 paymentForm.setVisible(true);
                             } else if (response == JOptionPane.NO_OPTION) {

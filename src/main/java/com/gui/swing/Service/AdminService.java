@@ -19,6 +19,9 @@ public class AdminService {
     @Autowired
     private FloorService floorService;
 
+    @Autowired
+    private RoomService roomService;
+
     public AddNewFloorResponse addNewFloor(String floorName){
         return floorService.addNewFloor(floorName);
     }
@@ -31,21 +34,15 @@ public class AdminService {
         return floorService.addNewRoomToFloor(addNewRoomRequest,floorName);
     }
 
-    // public Boolean changeStatusFloor
+    public Long getTotalOccupancy(){
+        return roomService.countNumberAllRoom()*5;
+    }
 
-    // public Boolean changeRoomToAnotherFloor
+    public Long getRealOccupancy(){
+        return roomService.countNumberAllRoomIsActive()*5;
+    }
 
-    // public Boolean updateInfoRoom
-
-    // public Boolean changeStatusRoom
-
-    // public Boolean updateTypeOfRoom
-
-    // public Boolean addNewRoomType
-
-    // public Boolean updateValueRoomType
-
-    // public Boolean updatePriceRoomType
-
-    // Management Dashboard
+    public Long getOccupied(){
+        return getTotalOccupancy() - getRealOccupancy();
+    }
 }

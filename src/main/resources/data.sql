@@ -14,11 +14,11 @@ INSERT IGNORE INTO user (user_id, user_name, user_password, user_is_active, role
 /* End */
 
 /* Table Type (type of room) */
-INSERT IGNORE INTO type (room_type_id, room_type_value) value (1, 'SuperLuxury');
-INSERT IGNORE INTO type (room_type_id, room_type_value) value (2, 'Luxury');
-INSERT IGNORE INTO type (room_type_id, room_type_value) value (3, 'Vip');
-INSERT IGNORE INTO type (room_type_id, room_type_value) value (4, 'Good');
-INSERT IGNORE INTO type (room_type_id, room_type_value) value (5, 'Normal');
+INSERT IGNORE INTO type (room_type_id, room_type_price_per_day, room_type_price_per_hour, room_type_value) value (1, 5000000, 500000, 'SuperLuxury');
+INSERT IGNORE INTO type (room_type_id, room_type_price_per_day, room_type_price_per_hour, room_type_value) value (2, 4000000, 400000, 'Luxury');
+INSERT IGNORE INTO type (room_type_id, room_type_price_per_day, room_type_price_per_hour, room_type_value) value (3, 3000000, 300000, 'Vip');
+INSERT IGNORE INTO type (room_type_id, room_type_price_per_day, room_type_price_per_hour, room_type_value) value (4, 2000000, 200000, 'Good');
+INSERT IGNORE INTO type (room_type_id, room_type_price_per_day, room_type_price_per_hour, room_type_value) value (5, 1000000, 100000, 'Normal');
 /* End */
 
 /* Table Floor */

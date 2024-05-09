@@ -1,6 +1,7 @@
 package com.gui.swing.Controller.Admin;
 
 import com.gui.swing.Controller.Login;
+import com.gui.swing.Service.AdminService;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
@@ -33,10 +34,10 @@ public class AdminDashboard extends javax.swing.JFrame {
     }
 
     public AdminDashboard(ConfigurableApplicationContext context) {
+        this.context = context;
         initComponents();
         setLocationRelativeTo(null);
         cardLayout = (CardLayout) pnlCards.getLayout();
-        this.context = context;
     }
 
     /**
@@ -47,7 +48,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        AdminService adminService = context.getBean(AdminService.class);
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -345,7 +346,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel18.setText("Total");
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel19.setText("400");
+        jLabel19.setText(String.valueOf(adminService.getTotalOccupancy()));
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -375,7 +376,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel20.setText("Vacant");
 
         jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel21.setText("200");
+        jLabel21.setText(String.valueOf(adminService.getRealOccupancy()));
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -405,7 +406,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel22.setText("Occupied");
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel23.setText("200");
+        jLabel23.setText(String.valueOf(adminService.getOccupied()));
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
@@ -595,7 +596,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         this.dispose(); // Đóng JFrame hiện tại
-        Login loginForm = new Login(); // Tạo một instance mới của Login form
+        Login loginForm = new Login(context); // Tạo một instance mới của Login form
         loginForm.setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
@@ -624,7 +625,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCustomerActionPerformed
 
     private void btnReservationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservationActionPerformed
-        ReservationAdmin reservationPanel = new ReservationAdmin(); // Tạo instance của JPanel chứa thông tin danh sách phòng
+        ReservationAdmin reservationPanel = new ReservationAdmin(context); // Tạo instance của JPanel chứa thông tin danh sách phòng
         pnlCard4.setLayout(new BorderLayout()); // Set layout cho pnlCard2
         pnlCard4.removeAll(); // Xóa tất cả các components hiện đang có (nếu có)
         pnlCard4.add(reservationPanel, BorderLayout.CENTER); // Thêm roomListPanel vào pnlCard2

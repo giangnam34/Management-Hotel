@@ -6,10 +6,16 @@ package com.gui.swing.Controller.Rec;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.util.Date;
+
+import com.gui.swing.DTO.Response.GeneralResponse;
+import com.gui.swing.Service.BookingRoomService;
 import com.toedter.calendar.JTextFieldDateEditor;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  *
@@ -20,14 +26,24 @@ public class BookingRoomWithDate extends javax.swing.JFrame {
     /**
      * Creates new form BookingRoomWithDate
      */
-    public BookingRoomWithDate() {
+    private ConfigurableApplicationContext context;
+    public BookingRoomWithDate(ConfigurableApplicationContext context,LocalDateTime localDateTime,String roomName) {
+        this.context = context;
         initComponents();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        Date today = new Date();
-        txtDateCheckin.setMinSelectableDate(today);
-        txtDateCheckout.setMinSelectableDate(today);
+        txtRoom.setText(roomName);
+        txtRoom.setEnabled(false);
+        Date dateChoose = Date.from(localDateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        txtDateCheckin.setMinSelectableDate(dateChoose);
+        txtDateCheckin.setMaxSelectableDate(dateChoose);
+        txtDateCheckout.setMinSelectableDate(dateChoose);
+
+        txtLastName.setText("Vo ");
+        txtID.setText("051202007648");
+        txtPhone.setText("0968322444");
+        txtEmail.setText("giangnam.17122002@gmail.com");
 
         // Vô hiệu hóa việc nhập trực tiếp từ bàn phím vào các trường ngày
         JTextFieldDateEditor editorCheckin = (JTextFieldDateEditor) txtDateCheckin.getDateEditor();
@@ -36,6 +52,30 @@ public class BookingRoomWithDate extends javax.swing.JFrame {
         JTextFieldDateEditor editorCheckout = (JTextFieldDateEditor) txtDateCheckout.getDateEditor();
         editorCheckout.setEditable(false);
 
+        btnBook.addActionListener(e -> submitForm());
+    }
+
+    private void submitForm() {
+        // Lấy dữ liệu từ form
+        String identificationNumber = txtID.getText();
+        String roomNumber = txtRoom.getText();
+//        String firstName = txtFirstName.getText();
+        String lastName = txtLastName.getText();
+        String email = txtEmail.getText();
+        String phone = txtPhone.getText();
+        LocalDateTime dateCheckIn = txtDateCheckin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
+        LocalDateTime dateCheckOut = txtDateCheckout.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay().plusHours(24);
+        // Kiểm tra loại đặt phòng
+//        String typeBooking = radioHour.isSelected() ? "Hour" : "Day";
+
+        BookingRoomService bookingRoomService = context.getBean(BookingRoomService.class);
+
+        GeneralResponse generalResponse = bookingRoomService.bookingRoom(roomNumber, "Day", "Vo", lastName, identificationNumber, phone, email, dateCheckIn, dateCheckOut);
+        // Hiển thị dữ liệu hoặc xử lý nó
+        JOptionPane.showMessageDialog(this, generalResponse.getMessage());
+        if (generalResponse.getStatus() == 1) {
+            this.dispose();
+        }
     }
 
     /**
@@ -98,7 +138,7 @@ public class BookingRoomWithDate extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jLabel6.setText("Check out date:");
+        jLabel6.setText("Check in date:");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -317,11 +357,11 @@ public class BookingRoomWithDate extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new BookingRoomWithDate().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+////            public void run() {
+////                new BookingRoomWithDate().setVisible(true);
+////            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

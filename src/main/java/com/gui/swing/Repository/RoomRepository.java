@@ -23,5 +23,7 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
 
     public Room findByRoomNameAndFloor_FloorName(String roomName, String floorName);
 
+    public Long countRoomByRoomIsActive(Boolean isActive);
+
 
 }
