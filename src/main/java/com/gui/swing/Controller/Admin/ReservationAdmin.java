@@ -3,7 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.gui.swing.Controller.Admin;
+import com.gui.swing.DTO.UserDTO;
+import com.gui.swing.Entity.RoomGuest;
+import com.gui.swing.Service.BookingRoomService;
+import org.springframework.context.ConfigurableApplicationContext;
+
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 /**
  *
@@ -14,20 +20,29 @@ public class ReservationAdmin extends javax.swing.JPanel {
     /**
      * Creates new form ReservationAdmin
      */
-    public ReservationAdmin() {
+    private ConfigurableApplicationContext context;
+    public ReservationAdmin(ConfigurableApplicationContext context) {
+        this.context = context;
         initComponents();
          populateTable();
     }
     
      private void populateTable() {
         // Dữ liệu cho các hàng của bảng
-        Object[][] data = {
-            {1, "John", "Doe", "2021-06-01", "2021-06-15", "101"},
-            {2, "Jane", "Smith", "2021-06-10", "2021-06-20", "102"},
-        };
+         BookingRoomService bookingRoomService = context.getBean(BookingRoomService.class);
+         List<RoomGuest> roomGuestList = bookingRoomService.findAll();
+         Object[][] data = new Object[roomGuestList.size()][6];
 
+         for (int i = 0; i < roomGuestList.size(); i++) {
+             data[i][0] = roomGuestList.get(i).getGuest().getIdentificationCard();
+             data[i][1] = roomGuestList.get(i).getGuest().getFirstName();
+             data[i][2] = roomGuestList.get(i).getGuest().getLastName();
+             data[i][3] = roomGuestList.get(i).getDateBegin();
+             data[i][4] = roomGuestList.get(i).getDateEnd();
+             data[i][5] = roomGuestList.get(i).getRoom().getRoomName();
+         }
         // Tiêu đề cho các cột
-        String[] columnNames = {"ID", "First Name", "Last Name", "Check In", "Check Out", "Room"};
+        String[] columnNames = {"Identification", "First Name", "Last Name", "Check In", "Check Out", "Room"};
         
         // Tạo model và set cho jTable1
         DefaultTableModel model = new DefaultTableModel(data, columnNames);

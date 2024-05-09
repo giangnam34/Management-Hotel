@@ -20,7 +20,10 @@ public class Type {
     private EnumTypeRoom roomTypeValue;
 
     @Min(0)
-    private Double roomTypePrice;
+    private Double roomTypePricePerHour;
+
+    @Min(0)
+    private Double roomTypePricePerDay;
 
     @OneToMany(mappedBy = "type")
     private List<Room> roomList;

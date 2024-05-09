@@ -29,6 +29,13 @@ public class RoomService {
     @Autowired
     private RoomInfoRepository roomInfoRepository;
 
+    public Long countNumberAllRoom(){
+        return roomRepository.count();
+    }
+
+    public Long countNumberAllRoomIsActive(){
+        return roomRepository.countRoomByRoomIsActive(true);
+    }
     public Room findByRoomId(int roomId) {
         if (roomRepository.existsRoomByRoomId(roomId)) {
             return roomRepository.findByRoomId(roomId);
@@ -127,6 +134,7 @@ public class RoomService {
                 if (roomInfo1.getRoomInfoId() == roomInfo.getRoomInfoId()){
                     room.removeRoomInfo(roomInfo);
                     roomInfo1.setRoom(null);
+                    roomInfoRepository.save(roomInfo1);
                     break;
                 }
             }

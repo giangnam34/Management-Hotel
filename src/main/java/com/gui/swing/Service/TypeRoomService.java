@@ -29,14 +29,14 @@ public class TypeRoomService {
 
     }
 
-    public GeneralResponse updatePriceRoomType(EnumTypeRoom typeRoom, Double price) {
-        try {
-            Type type = findTypeByName(typeRoom);
-            type.setRoomTypePrice(price);
-            typeRepository.save(type);
-        } catch (IllegalArgumentException | DataAccessException exception) {
-            return new GeneralResponse(0, exception.getMessage());
-        }
-        return new GeneralResponse(1, "Cập nhật giá thành công!");
-    }
+//    public GeneralResponse updatePriceRoomType(EnumTypeRoom typeRoom, Double price) {
+//        try {
+//            Type type = findTypeByName(typeRoom);
+//            type.setRoomTypePrice(price);
+//            typeRepository.save(type);
+//        } catch (IllegalArgumentException | DataAccessException exception) {
+//            return new GeneralResponse(0, exception.getMessage());
+//        }
+//        return new GeneralResponse(1, "Cập nhật giá thành công!");
+//    }
 }

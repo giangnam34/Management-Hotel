@@ -23,7 +23,7 @@ public class BookingRoom extends javax.swing.JFrame {
      * Creates new form BookingRoom
      */
     private ConfigurableApplicationContext context;
-    public BookingRoom(ConfigurableApplicationContext context,String roomName) {
+    public BookingRoom(LocalDateTime timeBegin, LocalDateTime timeEnd,ConfigurableApplicationContext context,String roomName) {
         this.context = context;
         initComponents();
         setLocationRelativeTo(null);
@@ -278,47 +278,7 @@ public class BookingRoom extends javax.swing.JFrame {
 
         jLabel8.setText("Email:");
 
-//        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-//        jPanel7.setLayout(jPanel7Layout);
-//        jPanel7Layout.setHorizontalGroup(
-//            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//            .addGroup(jPanel7Layout.createSequentialGroup()
-//                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//                .addComponent(jLabel8)
-//                .addGap(18, 18, 18)
-//                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-//                .addContainerGap())
-//        );
-//        jPanel7Layout.setVerticalGroup(
-//            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//            .addGroup(jPanel7Layout.createSequentialGroup()
-//                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-//                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-//                    .addComponent(jLabel8))
-//                .addContainerGap())
-//        );
-
         jLabel9.setText("Phone");
-
-//        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-//        jPanel8.setLayout(jPanel8Layout);
-//        jPanel8Layout.setHorizontalGroup(
-//            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//            .addGroup(jPanel8Layout.createSequentialGroup()
-//                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//                .addComponent(jLabel9)
-//                .addGap(18, 18, 18)
-//                .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-//                .addContainerGap())
-//        );
-//        jPanel8Layout.setVerticalGroup(
-//            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//            .addGroup(jPanel8Layout.createSequentialGroup()
-//                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-//                    .addComponent(txtPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-//                    .addComponent(jLabel9))
-//                .addContainerGap())
-//        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
