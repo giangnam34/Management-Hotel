@@ -59,12 +59,17 @@ public class FloorService {
     }
 
     public List<Floor> getFloorsByFilters(String searchText, String status) {
+        System.out.println(status);
         List<Floor> floorList = floorRepository.findAll();
 
-        if (status != null && !status.isEmpty() && !"--- Choose ---".equals(status)) {
-            Boolean isActive = "Yes".equalsIgnoreCase(status);
-            System.out.println(isActive);
-            floorList = floorList.stream().filter(floor -> floor.getIsActive() == isActive).toList();
+        if (status != null && !status.isEmpty() && !"isActive".equals(status)) {
+            boolean isActive = "Yes".equalsIgnoreCase(status);
+            floorList = floorList.stream()
+                    .filter(floor -> {
+                        Boolean floorIsActive = floor.getIsActive();
+                        return floorIsActive != null && floorIsActive == isActive;
+                    })
+                    .collect(Collectors.toList());
         }
         System.out.println("Running 2");
 

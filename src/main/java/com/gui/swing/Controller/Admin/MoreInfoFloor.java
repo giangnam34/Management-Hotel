@@ -26,10 +26,10 @@ public class MoreInfoFloor extends javax.swing.JFrame {
 
     public void setFloorInfo(Floor floor) {
         txtFloorName.setText(floor.getFloorName());
-        txtFloorName.setEditable(false);
+        txtFloorName.setEnabled(false);
 
         txtIsActive.setText(floor.getIsActive() ? "Yes" : "No");
-        txtIsActive.setEditable(false);
+        txtIsActive.setEnabled(false);
 
         List<Room> roomList = floor.getRoomList();
         StringBuilder roomNamesBuilder = new StringBuilder();
@@ -47,6 +47,7 @@ public class MoreInfoFloor extends javax.swing.JFrame {
 
         // Thiết lập nội dung và kích thước của JTextArea
         txtListRoom.setText(roomNamesBuilder.toString());
+        txtListRoom.setEnabled(false);
         int numRows = Math.min(roomList.size(), 5); // Giới hạn số hàng hiển thị
         txtListRoom.setRows(numRows); // Đặt số hàng
         txtListRoom.setLineWrap(true); // Tự động xuống dòng khi cần thiết
