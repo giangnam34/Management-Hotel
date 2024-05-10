@@ -39,7 +39,10 @@ public class AdminDashboard extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         cardLayout = (CardLayout) pnlCards.getLayout();
+        initData();
+    }
 
+    private void initData() {
         AdminService adminService = context.getBean(AdminService.class);
         Long totalOcc = adminService.getTotalOccupancy();
         Long realOcc = adminService.getRealOccupancy();
@@ -622,6 +625,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
+        initData();
         cardLayout.show(pnlCards, "pnlCard1");
     }//GEN-LAST:event_btnDashboardActionPerformed
 

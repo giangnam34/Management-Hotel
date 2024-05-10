@@ -11,11 +11,13 @@ import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
-
 import java.time.LocalDate;
+import java.util.Date;
+import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,66 +39,75 @@ public class BookingRoomService {
     }
 
     public List<RoomGuest> getBookingRoomByFilters(String inputText, String selectedType, String dateCheckIn, String dateCheckOut) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
         List<RoomGuest> bookingRoomList = roomGuestRepository.findAll();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
-        Date checkInDate = null;
-        Date checkOutDate = null;
+        LocalDate checkInDate = null;
+        LocalDate checkOutDate = null;
+        String inputTextLower = inputText.toLowerCase();
 
         try {
             if (!dateCheckIn.isEmpty()) {
-                checkInDate = dateFormat.parse(dateCheckIn);
+                Date parsedDateCheckIn = dateFormat.parse(dateCheckIn);
+                checkInDate = parsedDateCheckIn.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             }
-
             if (!dateCheckOut.isEmpty()) {
-                checkOutDate = dateFormat.parse(dateCheckOut);
+                Date parsedDateCheckOut = dateFormat.parse(dateCheckOut);
+                checkOutDate = parsedDateCheckOut.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
+        final LocalDate finalCheckInDate = checkInDate;
+        final LocalDate finalCheckOutDate = checkOutDate;
+
         if (!inputText.isEmpty()) {
             switch (selectedType) {
                 case "ID":
                     bookingRoomList = bookingRoomList.stream()
-                            .filter(roomGuest -> roomGuest.getGuest().getIdentificationCard().equalsIgnoreCase(inputText))
+                            .filter(roomGuest -> roomGuest.getGuest().getIdentificationCard().toLowerCase().contains(inputTextLower))
                             .collect(Collectors.toList());
                     break;
                 case "First Name":
                     bookingRoomList = bookingRoomList.stream()
-                            .filter(roomGuest -> roomGuest.getGuest().getFirstName().equalsIgnoreCase(inputText))
+                            .filter(roomGuest -> roomGuest.getGuest().getFirstName().toLowerCase().contains(inputTextLower))
                             .collect(Collectors.toList());
                     break;
                 case "Last Name":
                     bookingRoomList = bookingRoomList.stream()
-                            .filter(roomGuest -> roomGuest.getGuest().getLastName().equalsIgnoreCase(inputText))
+                            .filter(roomGuest -> roomGuest.getGuest().getLastName().toLowerCase().contains(inputTextLower))
                             .collect(Collectors.toList());
                     break;
                 case "Room":
                     bookingRoomList = bookingRoomList.stream()
-                            .filter(roomGuest -> roomGuest.getRoom().getRoomName().equalsIgnoreCase(inputText))
+                            .filter(roomGuest -> roomGuest.getRoom().getRoomName().toLowerCase().contains(inputTextLower))
                             .collect(Collectors.toList());
-                    break;
-                case "Check-In Date":
-                    if (checkInDate != null) {
-                        final Date finalCheckInDate = checkInDate;
-                        bookingRoomList = bookingRoomList.stream()
-                                .filter(roomGuest -> roomGuest.getDateBegin().equals(finalCheckInDate))
-                                .collect(Collectors.toList());
-                    }
-                    break;
-                case "Check-Out Date":
-                    if (checkOutDate != null) {
-                        final Date finalCheckOutDate = checkOutDate;
-                        bookingRoomList = bookingRoomList.stream()
-                                .filter(roomGuest -> roomGuest.getDateEnd().equals(finalCheckOutDate))
-                                .collect(Collectors.toList());
-                    }
                     break;
                 default:
                     // Do nothing or handle default case
                     break;
             }
+        }
+
+        if (finalCheckInDate != null || finalCheckOutDate != null) {
+            bookingRoomList = bookingRoomList.stream()
+                    .filter(roomGuest -> {
+                        LocalDate roomCheckInDate = roomGuest.getDateBegin().toLocalDate();
+                        LocalDate roomCheckOutDate = roomGuest.getDateEnd().toLocalDate();
+
+                        // Filter RoomGuests within the selected date range
+                        if (finalCheckInDate != null && finalCheckOutDate != null) {
+                            return roomCheckInDate.isEqual(finalCheckInDate) && roomCheckOutDate.isEqual(finalCheckOutDate);
+                        } else if (finalCheckInDate != null) {
+                            // Filter by check-in date
+                            return roomCheckInDate.isEqual(finalCheckInDate);
+                        } else { // finalCheckOutDate != null
+                            // Filter by check-out date
+                            return roomCheckOutDate.isEqual(finalCheckOutDate);
+                        }
+                    })
+                    .collect(Collectors.toList());
         }
 
         return bookingRoomList;
