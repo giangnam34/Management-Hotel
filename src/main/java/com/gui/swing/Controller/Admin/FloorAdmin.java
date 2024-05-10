@@ -61,13 +61,13 @@ public class FloorAdmin extends javax.swing.JPanel {
         btnReset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                filterStatus.setSelectedItem("--- Choose ---");
+                filterStatus.setSelectedItem("isActive");
 
                 // Đặt lại trường nhập liệu tìm kiếm
                 inputSearch.setText("");
 
                 // Tải lại dữ liệu và hiển thị trên bảng (ví dụ mặc định là tài liệu trang đầu tiên)
-                populateTable("", "--- Choose ---");
+                populateTable("", "isActive");
             }
         });
     }
@@ -284,7 +284,7 @@ public class FloorAdmin extends javax.swing.JPanel {
         btnSearch.setForeground(new java.awt.Color(255, 255, 255));
         btnSearch.setText("SEARCH");
 
-        filterStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--- Choose ---", "Yes", "No" }));
+        filterStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "isActive", "Yes", "No" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
