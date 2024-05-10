@@ -21,6 +21,10 @@ public class AdminService {
 
     @Autowired
     private RoomService roomService;
+    
+     @Autowired
+    private BookingRoomService bookingRoomService;
+    
 
     public AddNewFloorResponse addNewFloor(String floorName){
         return floorService.addNewFloor(floorName);
@@ -35,14 +39,24 @@ public class AdminService {
     }
 
     public Long getTotalOccupancy(){
-        return roomService.countNumberAllRoom()*5;
+        return roomService.countNumberAllRoom();
     }
 
     public Long getRealOccupancy(){
-        return roomService.countNumberAllRoomIsActive()*5;
+        return roomService.countNumberAllRoomIsActive();
     }
 
     public Long getOccupied(){
         return getTotalOccupancy() - getRealOccupancy();
     }
+    
+    public double getRevenue(){
+        return bookingRoomService.getTotalRevenue();
+    }
+    
+    public int getBookedRoom(){
+        return bookingRoomService.getBookedRoomCount();
+    }
+    
+    
 }

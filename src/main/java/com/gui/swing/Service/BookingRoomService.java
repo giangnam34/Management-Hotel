@@ -19,7 +19,9 @@ import java.time.ZoneOffset;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -188,6 +190,41 @@ public class BookingRoomService {
 
     private Long calcTime(LocalDateTime dateBegin, LocalDateTime dateEnd) {
         return ChronoUnit.SECONDS.between(dateBegin, dateEnd);
+    }
+
+    public double getTotalRevenue() {
+        LocalDateTime today = LocalDateTime.now();
+        List<RoomGuest> roomGuestList = roomGuestRepository.findAll();
+        double totalRevenue = 0.0;
+
+        for (RoomGuest roomGuest : roomGuestList) {
+            LocalDateTime checkInDate = roomGuest.getDateBegin();
+            LocalDateTime checkOutDate = roomGuest.getDateEnd();
+
+            if (checkInDate.isBefore(today) && checkOutDate.isAfter(today)) {
+                totalRevenue += calcPriceRoom(roomGuest);
+            }
+        }
+
+        return totalRevenue;
+    }
+
+    // Đếm số lượng phòng đã được đặt
+    public int getBookedRoomCount() {
+        LocalDateTime today = LocalDateTime.now();
+        List<RoomGuest> roomGuestList = roomGuestRepository.findAll();
+        Set<String> bookedRoomNames = new HashSet<>();
+
+        for (RoomGuest roomGuest : roomGuestList) {
+            LocalDateTime checkInDate = roomGuest.getDateBegin();
+            LocalDateTime checkOutDate = roomGuest.getDateEnd();
+
+            if ((checkInDate.isBefore(today) && checkOutDate.isAfter(today))) {
+                bookedRoomNames.add(roomGuest.getRoom().getRoomName());
+            }
+        }
+
+        return bookedRoomNames.size();
     }
     // Calc hour rent room
 
