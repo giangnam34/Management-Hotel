@@ -17,6 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -33,36 +34,6 @@ public class ReservationAdmin extends javax.swing.JPanel {
         this.context = context;
         initComponents();
         populateTable("", "", "", "");
-
-        txtDateCheckIn.setDate(new Date());
-
-        txtDateCheckIn.setMinSelectableDate(new Date());
-
-        txtDateCheckIn.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent e) {
-                System.out.println("Have change");
-                if ("date".equals(e.getPropertyName())) {
-                    if (((Date) e.getNewValue()).before(new Date())) {
-                        txtDateCheckIn.setDate((Date) e.getOldValue());
-                    }
-                }
-            }
-        });
-
-        txtDateCheckout.setDate(new Date());
-
-        txtDateCheckout.setMinSelectableDate(new Date());
-
-        txtDateCheckout.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent e) {
-                System.out.println("Have change");
-                if ("date".equals(e.getPropertyName())) {
-                    if (((Date) e.getNewValue()).before(new Date())) {
-                        txtDateCheckout.setDate((Date) e.getOldValue());
-                    }
-                }
-            }
-        });
     }
 
     private void populateTable(String inputText, String selectedType, String dateCheckIn, String dateCheckOut) {
@@ -88,10 +59,7 @@ public class ReservationAdmin extends javax.swing.JPanel {
 
     private List<RoomGuest> getData(String inputText, String selectedType, String dateCheckIn, String dateCheckOut) {
         BookingRoomService bookingRoomService = context.getBean(BookingRoomService.class);
-        if (inputText.isEmpty()) {
-            return bookingRoomService.findAll();
-        }
-        return bookingRoomService.getBookingRoomByFilters(inputText, selectedType, dateCheckIn, dateCheckIn);
+        return bookingRoomService.getBookingRoomByFilters(inputText, selectedType, dateCheckIn, dateCheckOut);
     }
 
     /**
@@ -207,7 +175,7 @@ public class ReservationAdmin extends javax.swing.JPanel {
             }
         });
 
-        txtFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "First Name", "Last Name", "Room" }));
+        txtFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Identification", "First Name", "Last Name", "Room" }));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -281,6 +249,17 @@ public class ReservationAdmin extends javax.swing.JPanel {
         String selectedDateCI = txtDateCheckIn.getDate() != null ? dateFormat.format(txtDateCheckIn.getDate()) : "";
         String selectedDateCO = txtDateCheckout.getDate() != null ? dateFormat.format(txtDateCheckout.getDate()) : "";
 
+        if (txtDateCheckIn.getDate() != null && txtDateCheckout.getDate() != null) {
+            Date checkInDate = txtDateCheckIn.getDate();
+            Date checkOutDate = txtDateCheckout.getDate();
+
+            // Kiểm tra nếu ngày check out nhỏ hơn hoặc bằng ngày check in
+            if (checkOutDate.compareTo(checkInDate) <= 0) {
+                JOptionPane.showMessageDialog(this, "Check Out Date must be after Check In Date.", "Invalid Date", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
         // Thực hiện tìm kiếm tại đây
         populateTable(inputText, selectedType, selectedDateCI, selectedDateCO);
     }//GEN-LAST:event_btnSearchActionPerformed
@@ -291,9 +270,9 @@ public class ReservationAdmin extends javax.swing.JPanel {
         // Reset combo boxes về giá trị mặc định hoặc giá trị đầu tiên
         txtFilter.setSelectedIndex(0);
 
-        txtDateCheckIn.setDate(new Date());
+        txtDateCheckIn.setDate(null);
 
-        txtDateCheckout.setDate(new Date());
+        txtDateCheckout.setDate(null);
 
         populateTable("", "", "", "");
     }//GEN-LAST:event_btnResetActionPerformed
