@@ -64,7 +64,7 @@ public class EditRoomInfo extends javax.swing.JFrame {
         for (int i = 0; i < floors.size(); i++) {
             Floor floor = floors.get(i);
             txtFloor.addItem(floor.getFloorName());
-            if (floor.equals(room.getFloor())) {
+            if (floor.getFloorId() == room.getFloor().getFloorId()) {
                 floorIndex = i; 
             }
         }

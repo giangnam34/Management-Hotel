@@ -13,5 +13,8 @@ public interface FloorRepository extends JpaRepository<Floor, Integer> {
 
     boolean existsFloorByFloorName(String floorName);
 
+    Floor findByFloorId(int floorId);
+
+    boolean existsFloorByFloorId(int floorId);
 
 }

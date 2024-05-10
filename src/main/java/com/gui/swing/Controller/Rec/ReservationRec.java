@@ -133,7 +133,9 @@ public class ReservationRec extends javax.swing.JPanel {
     }
 
     private void initTableForFloor(JTable table, int floorNumber) {
-        List<Room> roomList = floorData.get("Floor" + floorNumber);
+        FloorService floorService = context.getBean(FloorService.class);
+        String floorName = floorService.getAllFloor().get(floorNumber-1).getFloorName();
+        List<Room> roomList = floorData.get(floorName);
         if (roomList == null) {
             roomList = new ArrayList<>(); // Tránh NullPointerException nếu không có dữ liệu
         }

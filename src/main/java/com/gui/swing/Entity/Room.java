@@ -28,7 +28,7 @@ public class Room {
     @JoinColumn(name = "type_id", nullable = false)
     private Type type;
 
-    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     List<RoomInfo> roomInfoList;
 
     public Room(){

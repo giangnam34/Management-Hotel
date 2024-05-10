@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
@@ -28,6 +29,7 @@ public class FloorService {
     @Autowired
     private RoomService roomService;
 
+
     public List<Floor> getAllFloor() {
         return floorRepository.findAll();
     }
@@ -38,6 +40,15 @@ public class FloorService {
         }
         throw new IllegalArgumentException("Không tìm thấy tên tầng");
     }
+
+    public Floor findFloorById(int floorId) {
+        if (floorRepository.existsFloorByFloorId(floorId)) {
+            return floorRepository.findByFloorId(floorId);
+        }
+        throw new IllegalArgumentException("Không tìm thấy tên tầng");
+    }
+
+
 
     public void saveFloor(Floor floor) {
         try {
@@ -51,11 +62,11 @@ public class FloorService {
         List<Floor> floorList = floorRepository.findAll();
 
         if (status != null && !status.isEmpty() && !"--- Choose ---".equals(status)) {
-            boolean isActive = "Yes".equalsIgnoreCase(status);
-            floorList = floorList.stream()
-                    .filter(floor -> floor.getIsActive() == isActive)
-                    .collect(Collectors.toList());
+            Boolean isActive = "Yes".equalsIgnoreCase(status);
+            System.out.println(isActive);
+            floorList = floorList.stream().filter(floor -> floor.getIsActive() == isActive).toList();
         }
+        System.out.println("Running 2");
 
         if (!StringUtils.isEmpty(searchText)) {
             String searchTextUpper = searchText.toUpperCase();
@@ -84,10 +95,11 @@ public class FloorService {
         try {
             Floor floor = new Floor(floorName);
             Floor existingFloor = findFloorByName(existingFloorName);
+            long countRoom = roomService.countNumberAllRoom() + 1;
             for (Room room : existingFloor.getRoomList()) {
                 Room newRoom = new Room(room.getRoomName());
                 newRoom.setFloor(floor);
-                newRoom.setRoomName(room.getRoomName());
+                newRoom.setRoomName("Room" + countRoom++);
                 newRoom.setType(room.getType());
                 newRoom.setRoomIsActive(room.getRoomIsActive());
                 newRoom.setRoomInfoList(room.getRoomInfoList());

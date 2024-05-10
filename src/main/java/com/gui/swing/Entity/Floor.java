@@ -26,6 +26,7 @@ public class Floor {
     public Floor(String floorName) {
         this.isActive = true;
         this.floorName = floorName;
+        this.roomList = new ArrayList<>();
     }
 
     public Floor() {

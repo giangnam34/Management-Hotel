@@ -143,8 +143,11 @@ public class RecDashboard extends javax.swing.JFrame {
     private List<Room> getRooms(String floorName, String typeOfRoom, String view, String bed, String bathTub, String searchText) {
         RoomService roomService = context.getBean(RoomService.class);
 
+        FloorService floorService = context.getBean(FloorService.class);
+
         if (searchText.isEmpty() && floorName.isEmpty()) {
-            return roomService.findByFloor("Floor1");
+            floorName = floorService.getAllFloor().get(0).getFloorName();
+            return roomService.findByFloor(floorName);
         }
         return roomService.getRoomsInDashboard(floorName, typeOfRoom, view, bed, bathTub, searchText);
     }

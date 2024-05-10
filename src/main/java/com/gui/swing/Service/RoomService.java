@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
@@ -79,9 +80,23 @@ public class RoomService {
 
         if (!StringUtils.isEmpty(searchText)) {
             String searchTextUpper = searchText.toUpperCase();
-            roomList = roomList.stream()
-                    .filter(room -> room.getRoomName().toUpperCase().contains(searchTextUpper))
-                    .collect(Collectors.toList());
+            List<Room> result = new ArrayList<>();
+            for (Room room : roomList){
+                if (room.getRoomName().toUpperCase().contains(searchTextUpper)){
+                    result.add(room);
+                } else {
+                    boolean check = false;
+                    for (RoomInfo roomInfo : room.getRoomInfoList()){
+                        if (roomInfo.getKeyRoomInfo().toUpperCase().contains(searchTextUpper) ||
+                            roomInfo.getValueRoomInfo().toUpperCase().contains(searchTextUpper) ||
+                            roomInfo.getKeyRoomInfo().concat(" " + roomInfo.getValueRoomInfo()).toUpperCase().contains(searchTextUpper)){
+                            check = true;
+                        }
+                    }
+                    if (check) result.add(room);
+                }
+            }
+            roomList = result;
         }
 
         return roomList;

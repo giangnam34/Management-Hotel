@@ -82,6 +82,8 @@ public class FloorAdmin extends javax.swing.JPanel {
         // Fetch rooms
         List<Floor> floors = getFloors(inputText, selectedStatus);
 
+        System.out.println("Floor size: " + floors.size());
+
         // Populate the table model with room data
         for (Floor floor : floors) {
             // Create a row for each room

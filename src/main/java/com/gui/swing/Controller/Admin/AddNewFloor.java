@@ -219,7 +219,8 @@ public class AddNewFloor extends javax.swing.JFrame {
         if (jRadioButton1.isSelected()) {
             // Gọi service addNewFloor
             addNewFloor();
-        } else if (jRadioButton2.isSelected()) {
+        }
+        else if (jRadioButton2.isSelected()) {
             // Gọi service addNewFloorWithDataOfExistingDataFloor
             addNewFloorWithDataOfExistingDataFloor();
         } else {

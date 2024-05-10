@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -56,8 +57,9 @@ public class RoomAdmin extends javax.swing.JPanel {
                 String selectedTypeRoom = (String) filterTypeRoom.getSelectedItem();
                 String selectedStatus = (String) filterStatus.getSelectedItem();
                 String selectedFloor = (String) filterFloor.getSelectedItem();
-
-                System.out.println(selectedStatus);
+                selectedTypeRoom = selectedTypeRoom.equalsIgnoreCase("--- Choose ---") ? "" : selectedTypeRoom;
+                selectedStatus = selectedStatus.equalsIgnoreCase("--- Choose ---") ? "" : selectedStatus;
+                selectedFloor = selectedFloor.equalsIgnoreCase("--- Choose ---") ? "" : selectedFloor;
 
                 // Thực hiện tìm kiếm tại đây
                 populateTable(inputText, selectedTypeRoom, selectedStatus, selectedFloor);
@@ -75,7 +77,7 @@ public class RoomAdmin extends javax.swing.JPanel {
                 inputSearch.setText("");
 
                 // Tải lại dữ liệu và hiển thị trên bảng (ví dụ mặc định là tài liệu trang đầu tiên)
-                populateTable("", "--- Choose ---", "--- Choose ---", "Floor1");
+                populateTable("", "", "", "");
             }
         });
 
@@ -147,8 +149,17 @@ public class RoomAdmin extends javax.swing.JPanel {
 
     private List<Room> getRooms(String inputText, String selectedTypeRoom, String selectedStatus, String selectedFloor) {
         RoomService roomService = context.getBean(RoomService.class);
+        FloorService floorService = context.getBean(FloorService.class);
+        if (selectedFloor.isEmpty()){
+            selectedFloor = floorService.getAllFloor().get(0).getFloorName();
+        }
         if (inputText.isEmpty() && selectedFloor.isEmpty()) {
-            return roomService.findByFloor("Floor1");
+            if (!floorService.getAllFloor().isEmpty()) {
+//                List<Room> roomList = floorService.getAllFloor().get(0).getRoomList();
+//                System.out.println("Room size: " + roomList.size());
+                return floorService.getAllFloor().get(0).getRoomList();
+            }
+            else return new ArrayList<>();
         }
         return roomService.getRoomsByFilters(inputText, selectedTypeRoom, selectedStatus, selectedFloor);
     }
@@ -252,7 +263,8 @@ public class RoomAdmin extends javax.swing.JPanel {
                             public void windowClosed(WindowEvent e) {
                                 editRoomInfo.dispose();
                                 // Thực hiện các hành động sau khi cửa sổ đã đóng
-                                btnReset.doClick();
+                                populateTable("", "","",room.getFloor().getFloorName());
+//                                btnReset.doClick();
                             }
                         });
 //                        editRoomInfo.setFieldData(room);
